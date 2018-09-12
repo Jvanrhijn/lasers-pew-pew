@@ -15,6 +15,9 @@ classdef Shape
       on = false;
     end
 
+    new_ray = function interact_with(self, obj)
+
+    end
   
 
   end

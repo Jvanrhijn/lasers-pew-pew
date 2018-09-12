@@ -6,9 +6,14 @@ classdef Ray
   end
 
   methods
+  
+    % getters
+    s = function start(self)
+      s = start_;
+    end
 
-    new_ray = function interact_with(self, obj)
-
+    a = function angle(self)
+      a = angle_;
     end
 
   end
