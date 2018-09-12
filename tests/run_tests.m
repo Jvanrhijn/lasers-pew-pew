@@ -1,11 +1,14 @@
 clear; clear classes;
 
+addpath('../src/');
+
 import matlab.unittest.TestRunner;
 import matlab.unittest.TestSuite;
-
-suite = TestSuite.fromClass(?TestExample);
-
 runner = TestRunner.withTextOutput;
 
-runner.run(suite);
+suites = [TestSuite.fromClass(?TestExample)];
 
+
+for i=1:length(suites)
+  runner.run(suites(i));
+end

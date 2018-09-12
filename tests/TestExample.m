@@ -27,6 +27,10 @@ classdef TestExample < matlab.unittest.TestCase
       self.verifyEqual(self.foo.value(), 2);
     end
 
+    function test_failing(self)
+      self.verifyEqual(self.foo.value(), 10);
+    end
+
     % ... etc
 
   end
