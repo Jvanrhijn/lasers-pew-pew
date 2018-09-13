@@ -11,7 +11,7 @@ classdef Shape
     
     % to interact with a ray, the ray must intersect
     % the shape's surface
-    function on = point_on_surface(self, point)
+    function on = intersects(self, ray)
       on = false;
     end
 
