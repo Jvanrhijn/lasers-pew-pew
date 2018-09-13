@@ -1,4 +1,4 @@
-classdef Shape
+classdef Shape < handle
   properties
     location_    
   end
@@ -14,7 +14,7 @@ classdef Shape
       % dims is a matlab array of dimensions, differs per shape
       % ex. circle has radius, rectangle width and height, etc
     end
-    
+
     % to interact with a ray, the ray must intersect
     % the shape's surface
     function on = intersects(self, ray)
