@@ -1,5 +1,7 @@
 classdef Vec < handle
-
+  % A class representing a vector in a 2D plane
+  % exposes convenient interface for common
+  % vector operations
   properties
     x
     y
@@ -7,11 +9,17 @@ classdef Vec < handle
 
   methods
 
+    % constructor
+    function self = Vec(x, y)
+      self.x = x;
+      self.y = y;
+    end
+
     function val = dot(self, other)
       val = self.x*other.x + self.y*other.y;
     end
 
-    function val = norm(self, other)
+    function val = norm(self)
       val = sqrt(self.dot(self));
     end
 
@@ -23,6 +31,15 @@ classdef Vec < handle
 
     function val = angle(self, other)
       val = acos(self.dot(other)/(self.norm()*other.norm()));
+    end
+
+    % operator overloads
+    function vec = plus(self, other)
+      vec = Vec(self.x+other.x, self.y+other.y);
+    end
+
+    function vec = minus(self, other)
+      vec = Vec(self.x-other.x, self.y-other.y);
     end
 
   end
