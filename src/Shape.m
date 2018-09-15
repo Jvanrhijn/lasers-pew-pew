@@ -5,8 +5,8 @@ classdef Shape
 
   methods
 
-    function obj = Shape(obj, location)
-      obj.location_ = location;
+    function self = Shape(location)
+      self.location_ = location;
     end
 
     function set_dimensions(self, dims)
@@ -20,11 +20,6 @@ classdef Shape
     function on = intersects(self, ray)
       on = false;
     end
-
-    new_ray = function interact_with(self, obj)
-
-    end
-  
 
   end
 
