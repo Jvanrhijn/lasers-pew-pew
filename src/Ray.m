@@ -15,11 +15,11 @@ classdef Ray
   
     % getters
     function s = start(self)
-      s = start_;
+      s = self.start_;
     end
 
     function a = angle(self)
-      a = angle_;
+      a = self.angle_;
     end
 
   end
