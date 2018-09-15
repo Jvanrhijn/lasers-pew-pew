@@ -11,16 +11,25 @@ classdef Circle < Shape
     end
 
     function on = intersects(self, ray)
-      difference_vec = ray.start() - self.location_;
+      difference_vec = self.location_ - ray.start();
       distance = difference_vec.norm();
       if distance > self.radius_
-        % only works if ray starts outside circle
-        delta = asin(self.radius_/distance);
-        theta = difference_vec.angle(Vec(1, 0));
-        on = (-delta < ray.angle() - theta) & (ray.angle() - theta < delta);
+        % circle on x-axis
+        circle = Circle(Vec(distance, 0));
+        circle.set_dimensions(self.radius_);
+        % transformed ray
+        angle = difference_vec.angle_to_horizontal();
+        ray_tr = Ray(Vec(0, 0), ray.angle() - angle);
+        delta = asin(circle.radius()/distance);
+        on = (-delta < ray_tr.angle()) & (ray_tr.angle() < delta);
       else
         on = true; 
       end
+    end
+
+    % getters
+    function r = radius(self)
+      r = self.radius_;
     end
 
   end

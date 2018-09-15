@@ -35,7 +35,14 @@ classdef Vec < handle
 
     function val = angle_to_horizontal(self)
       % return angle to horizontal, between -pi, pi
-      val = atan2(self.x, self.y);
+      val = atan2(self.y, self.x);
+    end
+
+    function rotate(self, angle)
+      x = self.x*cos(angle) - self.y*sin(angle);
+      y = self.x*sin(angle) + self.y*cos(angle);
+      self.x = x;
+      self.y = y;
     end
 
     % operator overloads

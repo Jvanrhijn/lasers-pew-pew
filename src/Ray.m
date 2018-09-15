@@ -1,4 +1,4 @@
-classdef Ray
+classdef Ray < handle
 
   properties
     start_
