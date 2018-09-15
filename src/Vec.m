@@ -33,6 +33,11 @@ classdef Vec < handle
       val = acos(self.dot(other)/(self.norm()*other.norm()));
     end
 
+    function val = angle_to_horizontal(self)
+      % return angle to horizontal, between -pi, pi
+      val = atan2(x, y);
+    end
+
     % operator overloads
     function vec = plus(self, other)
       vec = Vec(self.x+other.x, self.y+other.y);
