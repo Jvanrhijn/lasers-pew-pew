@@ -42,7 +42,7 @@ classdef TestCircle < matlab.unittest.TestCase
         circle = Circle(center);
         circle.set_dimensions(radius);
         % ray going through centerpoint
-        ray_center = Ray(Vec(0, 0), center.angle(Vec(1, 0)));
+        ray_center = Ray(Vec(0, 0), center.angle_to_horizontal());
         self.assertTrue(circle.intersects(ray_center));
         % more generally:
         % TBI
