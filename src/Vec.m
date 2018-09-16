@@ -2,7 +2,7 @@ classdef Vec < handle
   % A class representing a vector in a 2D plane
   % exposes convenient interface for common
   % vector operations
-  properties
+  properties(SetAccess=protected)
     x
     y
   end

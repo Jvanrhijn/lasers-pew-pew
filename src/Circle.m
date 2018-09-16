@@ -1,35 +1,30 @@
 classdef Circle < Shape
 
-  properties
-    radius_
+  properties(SetAccess=private, GetAccess=public)
+    radius
   end
 
   methods
 
     function set_dimensions(self, dims)
-      self.radius_ = dims(1);
+      self.radius = dims(1);
     end
 
     function on = intersects(self, ray)
       difference_vec = self.location_ - ray.start();
       distance = difference_vec.norm();
-      if distance > self.radius_
+      if distance > self.radius
         % circle on x-axis
         circle = Circle(Vec(distance, 0));
-        circle.set_dimensions(self.radius_);
+        circle.set_dimensions(self.radius);
         % transformed ray
         angle = difference_vec.angle_to_horizontal();
         ray_tr = Ray(Vec(0, 0), ray.angle() - angle);
-        delta = asin(circle.radius()/distance);
+        delta = asin(circle.radius/distance);
         on = (-delta < ray_tr.angle()) & (ray_tr.angle() < delta);
       else
         on = true; 
       end
-    end
-
-    % getters
-    function r = radius(self)
-      r = self.radius_;
     end
 
   end
