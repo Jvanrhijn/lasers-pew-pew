@@ -31,9 +31,9 @@ classdef TestCircle < matlab.unittest.TestCase
         delta = asin(radius/x);
         rangle = delta+rand()*(pi - delta);
         % rotate ray and circle and move to random point
-        angle = pi*rand()*0;
-        dx = 10*rand()*0;
-        dy = 10*rand()*0;
+        angle = pi*rand();
+        dx = 10*rand();
+        dy = 10*rand();
         center = Vec(x+dx, y+dy);
         center.rotate(angle);
         circle = Circle(center);
