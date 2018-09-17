@@ -24,6 +24,19 @@ classdef Graphics < handle
       pbaspect([dx, dy, dz]/max([dx, dy, dz]));
     end
 
+    function draw_ray_set(self, rays)
+      xs = zeros(1, length(rays));
+      ys = zeros(1, length(rays));
+      for i=1:length(rays)
+        vertex = rays(i).start();
+        xs(i) = vertex.x;
+        ys(i) = vertex.y;
+      end
+      plot(xs, ys, 'r');
+      self.draw_ray(rays(end));
+      self.set_range([self.xlims_, self.ylims_]);
+    end
+
     function draw_circle(self, circle)
       r = circle.radius;
       p = circle.location();
