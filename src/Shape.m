@@ -35,6 +35,13 @@ classdef Shape < handle
     % vector there, in that order
     intersection_point(self, ray)
 
+    % Given the shape and a point p = (x, y),
+    % draw a line from the centroid to p.
+    % normal_vector returns the normal vector of
+    % the shape at the intersection point of the line
+    % and the shape boundary
+    normal_vector(self, point)
+
   end
 
 end

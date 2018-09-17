@@ -48,9 +48,9 @@ classdef TestCircle < matlab.unittest.TestCase
     function test_intersects_from_outside(self)
       for i=1:100
         % place circle on x-axis
-        x = rand();
-        y = 0;
         radius = rand();
+        x = 2*radius + abs(rand());
+        y = 0;
         % construct ray passing through circle coming from origin
         delta = asin(radius/x);
         rangle = delta*rand();
@@ -66,6 +66,8 @@ classdef TestCircle < matlab.unittest.TestCase
         ray_start.rotate(angle);
         ray = Ray(ray_start, rangle + angle);
         self.assertTrue(circle.intersects(ray));
+        [int, nvec] = circle.intersection_point(ray);
+        self.assertLessThan(nvec.dot(ray.direction()), 0);
       end
     end
 
@@ -91,8 +93,10 @@ classdef TestCircle < matlab.unittest.TestCase
         y = rand();
         circle = Circle(Vec(x, y));
         circle.set_dimensions(radius);
-        %ray = Ray(Vec(x+rand()*radius), y+rand()*radius, pi+rand()*-2*pi);
+        ray = Ray(Vec(x+rand()*0.5*radius, y+rand()*0.5*radius), pi+rand()*-2*pi);
         % in this case, 
+        [int, nvec] = circle.intersection_point(ray);
+        self.assertGreaterThan(nvec.dot(ray.direction()), 0);
       end
     end
 

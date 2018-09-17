@@ -23,7 +23,7 @@ classdef Vec < handle
       val = sqrt(self.dot(self));
     end
 
-    function normalize(self)
+    function self = normalize(self)
       norm = self.norm();
       self.x = self.x/norm;
       self.y = self.y/norm;
