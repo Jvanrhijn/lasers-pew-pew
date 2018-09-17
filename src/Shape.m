@@ -31,8 +31,8 @@ classdef Shape < handle
     % shape object, as well as normal vector of Shape at that
     % point
     % @param ray Ray for which to compute intersection
-    % @return int Cell array containing intersection point and the normal
-    % vector there
+    % @return int Intersection point and the normal
+    % vector there, in that order
     intersection_point(self, ray)
 
   end

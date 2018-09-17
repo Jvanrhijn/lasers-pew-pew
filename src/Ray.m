@@ -12,6 +12,10 @@ classdef Ray < handle
       self.start_ = start;
       self.angle_ = angle;
     end
+
+    function vec = direction(self)
+      vec = Vec(cos(self.angle_), sin(self.angle_));
+    end
   
     % getters
     function s = start(self)
