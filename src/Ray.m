@@ -1,4 +1,4 @@
-classdef Ray
+classdef Ray < handle
 
   properties
     start_
@@ -6,14 +6,20 @@ classdef Ray
   end
 
   methods
+
+    % constructor 
+    function self = Ray(start, angle)
+      self.start_ = start;
+      self.angle_ = angle;
+    end
   
     % getters
-    s = function start(self)
-      s = start_;
+    function s = start(self)
+      s = self.start_;
     end
 
-    a = function angle(self)
-      a = angle_;
+    function a = angle(self)
+      a = self.angle_;
     end
 
   end

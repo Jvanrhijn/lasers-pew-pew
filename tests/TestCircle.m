@@ -1,15 +1,7 @@
 classdef TestCircle < matlab.unittest.TestCase
 
-  properties
-    cirle
-  end
-
   methods(TestMethodSetup)
-
-    function create_circle(self)
-      self.circle = Circle(); 
-    end
-
+    % test setup
   end
 
   methods(TestMethodTeardown)
@@ -18,20 +10,64 @@ classdef TestCircle < matlab.unittest.TestCase
 
   methods(Test)
 
-    function test_retrieve(self)
-      self.verifyEqual(self.foo.value(), 1);
+    function test_intersect_from_center(self)
+      for i=1:100
+        x = rand();
+        y = rand();
+        circle = Circle(Vec(x, y));
+        circle.set_dimensions(1); % circle radius
+        ray = Ray(Vec(x, y), rand()); % ray starting in circle centroid
+        self.assertTrue(circle.intersects(ray)); 
+      end
     end
 
-    function test_increment(self)
-      self.foo.increment();
-      self.verifyEqual(self.foo.value(), 2);
+    function test_not_intersecting(self)
+      for i=1:100
+        % place circle on x-axis
+        radius = 0.1;
+        x = radius+abs(rand());
+        y = 0;
+        % construct ray passing through circle coming from origin
+        delta = asin(radius/x);
+        rangle = delta+rand()*(pi - delta);
+        % rotate ray and circle and move to random point
+        angle = pi*rand();
+        dx = 10*rand();
+        dy = 10*rand();
+        center = Vec(x+dx, y+dy);
+        center.rotate(angle);
+        circle = Circle(center);
+        circle.set_dimensions(radius);
+        ray_start = Vec(dx, dy);
+        ray_start.rotate(angle);
+        ray = Ray(ray_start, rangle + angle);
+        self.assertFalse(circle.intersects(ray));
+      end
     end
 
-    function test_failing(self)
-      self.verifyEqual(self.foo.value(), 10);
+    function test_intersects_from_outside(self)
+      for i=1:100
+        % place circle on x-axis
+        x = rand();
+        y = 0;
+        radius = 0.1;
+        % construct ray passing through circle coming from origin
+        delta = asin(radius/x);
+        rangle = delta*rand();
+        % rotate ray and circle and move to random point
+        angle = pi*rand();
+        dx = 10*rand();
+        dy = 10*rand();
+        center = Vec(x+dx, y+dy);
+        center.rotate(angle);
+        circle = Circle(center);
+        circle.set_dimensions(radius);
+        ray_start = Vec(dx, dy);
+        ray_start.rotate(angle);
+        ray = Ray(ray_start, rangle + angle);
+        self.assertTrue(circle.intersects(ray));
+      end
     end
-
-    % ... etc
 
   end
 
