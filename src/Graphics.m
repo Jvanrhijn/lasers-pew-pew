@@ -51,7 +51,7 @@ classdef Graphics < handle
       angle = ray.angle();
       start = ray.start();
       [m, b] = ray.line();
-      if (-pi/2 < angle) & (angle < pi/2)
+      if (-pi/2 <= angle) & (angle < pi/2)
         xmin = start.x;
         xmax = self.xlims_(2);
       else
