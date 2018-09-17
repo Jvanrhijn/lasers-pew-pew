@@ -1,4 +1,4 @@
-classdef Object < handle
+classdef Component < handle
 
   properties(SetAccess = protected, GetAccess = protected)
     interaction_type_
@@ -7,7 +7,7 @@ classdef Object < handle
 
   methods
 
-    function self = Object(shape, int_type)
+    function self = Component(shape, int_type)
         self.interaction_type_ = int_type;
         self.shape_ = shape;
     end
