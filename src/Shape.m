@@ -26,6 +26,15 @@ classdef Shape < handle
     % @return int True if ray intersects this shape
     intersects(self, ray)
 
+
+    % Compute the closest point of intersection between ray and
+    % shape object, as well as normal vector of Shape at that
+    % point
+    % @param ray Ray for which to compute intersection
+    % @return int Cell array containing intersection point and the normal
+    % vector there
+    intersection_point(self, ray)
+
   end
 
 end
