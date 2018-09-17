@@ -1,4 +1,4 @@
-classdef Shape
+classdef Shape < handle
   properties
     location_    
   end
