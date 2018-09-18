@@ -38,7 +38,7 @@ classdef Vec < handle
       val = atan2(self.y, self.x);
     end
 
-    function rotate(self, angle)
+    function self = rotate(self, angle)
       x = self.x*cos(angle) - self.y*sin(angle);
       y = self.x*sin(angle) + self.y*cos(angle);
       self.x = x;
