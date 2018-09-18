@@ -7,7 +7,7 @@ classdef Lens < Component
     end
 
     function new_ray = interact_with(self, ray)
-      [point, normal] = self.shape_.intersection_point(ray);
+      [point, normal] = self.shape.intersection_point(ray);
       % rotate everything to x-axis
       slant = normal.angle_to_horizontal();
       normal_rot = Vec(normal.x, normal.y).rotate(-slant);
