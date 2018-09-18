@@ -56,7 +56,7 @@ classdef Graphics < handle
 
     function draw_shape(self, x, y, edge_color, fill_color)
       fill(x, y, fill_color);
-      plot(x, y, edge_color, 'LineWidth', 1);
+      plot(x, y, edge_color, 'LineWidth', 2);
       self.set_range([self.xlims_, self.ylims_]);
     end
 
