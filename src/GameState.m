@@ -21,13 +21,10 @@ classdef GameState < handle
       % start at the starting point
       active_rays = [self.starting_ray_];
       ray = self.starting_ray_; 
-      i = 0;
       while true
         comp = self.find_closest(ray);
         % if a component was hit, add new ray to list of active rays
-        i = i + 1;
         if ~isempty(comp)
-          disp(comp)
           ray = comp.interact_with(ray);
           active_rays = [active_rays, ray];
         else
