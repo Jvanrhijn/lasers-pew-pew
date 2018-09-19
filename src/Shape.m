@@ -52,4 +52,19 @@ classdef Shape < handle
 
   end
 
+  methods(Access=protected)
+
+    function point = lines_intersection(self, slope1, offset1, slope2, offset2)
+      % find the intersection of two lines defined by given slopes and offsets
+      if slope1 == slope2
+        point = Vec([], []);
+      else
+        x = (offset2 - offset1)/(slope1 - slope2);
+        y = slope1*x + offset1;
+        point = Vec(x, y);
+      end
+    end
+
+  end
+
 end
