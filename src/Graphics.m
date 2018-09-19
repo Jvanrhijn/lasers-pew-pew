@@ -40,6 +40,9 @@ classdef Graphics < handle
       if isa(mirror.shape, 'Circle')
         [x, y] = self.circle_xy(mirror.shape);
         self.draw_shape(x, y, 'cyan', [0.5, 0.5, 0.5]);
+      elseif isa(mirror.shape, 'Rectangle')
+        [x, y] = self.rectangle_xy(mirror.shape);
+        self.draw_shape(x, y, 'cyan', [0.5, 0.5, 0.5]);
       else
         error('Shape drawing not implemented');
       end
@@ -48,6 +51,9 @@ classdef Graphics < handle
     function draw_lens(self, lens)
       if isa(lens.shape, 'Circle')
         [x, y] = self.circle_xy(lens.shape);
+        self.draw_shape(x, y, 'cyan', 'cyan');
+      elseif isa(lens.shape, 'Rectangle')
+        [x, y] = self.rectangle_xy(lens.shape);
         self.draw_shape(x, y, 'cyan', 'cyan');
       else
         error('Shape drawing not implemented');
@@ -79,6 +85,19 @@ classdef Graphics < handle
       theta = linspace(0, 2*pi, 1000);
       x = r*cos(theta) + p.x;
       y = r*sin(theta) + p.y;
+    end
+
+    function [x, y] = rectangle_xy(self, rectangle)
+      res = 250;
+      p = rectangle.location();  
+      [w, h] = rectangle.width_height(); 
+      s = rectangle.slant();
+      x = [-w/2, w/2, w/2, -w/2];
+      y = [-h/2, -h/2, h/2, h/2];
+      xrot = x*cos(s) - y*sin(s);
+      yrot = x*sin(s) + y*cos(s);
+      x = xrot + p.x;
+      y = yrot + p.y;
     end
 
     function draw_ray(self, ray)

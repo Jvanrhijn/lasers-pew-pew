@@ -102,10 +102,6 @@ classdef Circle < Shape
       nvec = Vec(cos(theta), sin(theta));
     end
 
-    function loc = location(self)
-      loc = self.location_
-    end
-
   end
 
 end
