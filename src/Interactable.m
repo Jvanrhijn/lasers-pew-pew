@@ -8,7 +8,8 @@ classdef Interactable < handle
     % all interactions are either:
     % absorbtion, reflection, transmission.
     %
-    % @param angle_in Incident angle of incoming ray
+    % @param angle_in Incident angle of incoming ray, positive for external
+    % reflection
     % @return angle_out Either reflective or transmittive angle of outgoing ray
     interact(self, angle_in)
   end

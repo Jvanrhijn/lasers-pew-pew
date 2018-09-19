@@ -1,15 +1,18 @@
-classdef Object < handle
+classdef Component < handle
 
-  properties(SetAccess = protected, GetAccess = protected)
+  properties(SetAccess=protected, GetAccess=protected)
     interaction_type_
-    shape_
+  end
+
+  properties(SetAccess=protected, GetAccess=public)
+    shape
   end
 
   methods
 
-    function self = Object(shape, int_type)
+    function self = Component(shape, int_type)
         self.interaction_type_ = int_type;
-        self.shape_ = shape;
+        self.shape = shape;
     end
 
   end

@@ -31,9 +31,16 @@ classdef Shape < handle
     % shape object, as well as normal vector of Shape at that
     % point
     % @param ray Ray for which to compute intersection
-    % @return int Cell array containing intersection point and the normal
-    % vector there
+    % @return int Intersection point and the normal
+    % vector there, in that order
     intersection_point(self, ray)
+
+    % Given the shape and a point p = (x, y),
+    % draw a line from the centroid to p.
+    % normal_vector returns the normal vector of
+    % the shape at the intersection point of the line
+    % and the shape boundary
+    normal_vector(self, point)
 
   end
 
