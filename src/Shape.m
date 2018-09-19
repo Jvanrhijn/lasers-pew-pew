@@ -26,7 +26,6 @@ classdef Shape < handle
     % @return int True if ray intersects this shape
     intersects(self, ray)
 
-
     % Compute the closest point of intersection between ray and
     % shape object, as well as normal vector of Shape at that
     % point
@@ -41,6 +40,15 @@ classdef Shape < handle
     % the shape at the intersection point of the line
     % and the shape boundary
     normal_vector(self, point)
+
+    % Checks whether a given point is located inside the shape
+    % @param point Vec representing location of point
+    % @return in True if point is inside shape
+    inside(self, point)
+
+    % Moves the shape to the given point
+    % @param point Point to move shape to
+    move_to(self, point)
 
   end
 

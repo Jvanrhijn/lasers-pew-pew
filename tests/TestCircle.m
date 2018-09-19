@@ -100,6 +100,19 @@ classdef TestCircle < matlab.unittest.TestCase
       end
     end
 
+    function test_inside(self)
+      for i=1:100
+        x = rand();
+        y = rand();
+        r = rand();
+        circle = Circle(Vec(x, y));
+        circle.set_dimensions(r);
+        % generate a point inside the circle
+        p = Vec(r*rand(), 0).rotate(pi*(rand() - 0.5)) + Vec(x, y);
+        self.assertTrue(circle.inside(p));
+      end
+    end
+
   end
 
 end

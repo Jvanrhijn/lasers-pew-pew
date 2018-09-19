@@ -87,6 +87,15 @@ classdef Circle < Shape
       end
     end
 
+    function in = inside(self, point)
+      sep = self.location_ - point;
+      in = sep.norm() <= self.radius;
+    end
+
+    function move_to(self, point)
+      self.location_ = point;
+    end
+
     function nvec = normal_vector(self, point)
       line = point - self.location_;
       theta = atan2(line.y, line.x);
