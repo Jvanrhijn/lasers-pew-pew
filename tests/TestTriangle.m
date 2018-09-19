@@ -1,9 +1,5 @@
 classdef TestTriangle < matlab.unittest.TestCase
 
-  properties
-    foo;
-  end
-
   methods(TestMethodSetup)
 
     function create_foo(self)
