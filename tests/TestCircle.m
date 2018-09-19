@@ -15,7 +15,7 @@ classdef TestCircle < matlab.unittest.TestCase
         x = rand();
         y = rand();
         circle = Circle(Vec(x, y));
-        circle.set_dimensions(1); % circle radius
+        circle.set_dimensions(rand()); % circle radius
         ray = Ray(Vec(x, y), rand()); % ray starting in circle centroid
         self.assertTrue(circle.intersects(ray)); 
       end
@@ -48,9 +48,9 @@ classdef TestCircle < matlab.unittest.TestCase
     function test_intersects_from_outside(self)
       for i=1:100
         % place circle on x-axis
-        x = rand();
+        radius = rand();
+        x = 2*radius + abs(rand());
         y = 0;
-        radius = 0.1;
         % construct ray passing through circle coming from origin
         delta = asin(radius/x);
         rangle = delta*rand();
@@ -66,6 +66,37 @@ classdef TestCircle < matlab.unittest.TestCase
         ray_start.rotate(angle);
         ray = Ray(ray_start, rangle + angle);
         self.assertTrue(circle.intersects(ray));
+        [int, nvec] = circle.intersection_point(ray);
+        self.assertLessThan(nvec.dot(ray.direction()), 0);
+      end
+    end
+
+    function test_intersection_point(self)
+      threshold = 1e-15;
+      for i=1:100
+        radius = rand();
+        % test for circle on x axis and ray along x axis
+        y = 0;
+        x = 2*radius + rand();
+        center = Vec(x, y);
+        circle = Circle(center);
+        circle.set_dimensions(radius);
+        ray = Ray(Vec(0, 0), 0);
+        [int, nvec] = circle.intersection_point(ray);
+        self.assertTrue(abs(int.x - (center.x-radius)) < threshold);
+        self.assertTrue(abs(int.y) < threshold);
+        self.assertTrue(abs(nvec.x - (-1)) < threshold);
+        self.assertTrue(abs(nvec.y - 0) < threshold);
+        self.assertLessThan(nvec.dot(ray.direction()), 0);
+        % test for ray starting inside circle 
+        x = rand();
+        y = rand();
+        circle = Circle(Vec(x, y));
+        circle.set_dimensions(radius);
+        ray = Ray(Vec(x+rand()*0.5*radius, y+rand()*0.5*radius), pi+rand()*-2*pi);
+        % in this case, 
+        [int, nvec] = circle.intersection_point(ray);
+        self.assertGreaterThan(nvec.dot(ray.direction()), 0);
       end
     end
 
