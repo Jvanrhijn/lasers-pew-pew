@@ -17,15 +17,18 @@ classdef Triangle < Shape
         function intersect = intersects(self, ray)
             y_ray = tan(ray.angle)*(x_ray - ray.start().x) - ray.start().y;
             
-            slope_side_onetwo = (self.vertex_two.y - self.vertex_one.y)/(self.vertex_two.x - self.vertex_one.x);
-            y_side_onetwo = slope_side_onetwo*(x_onetwo - self.vertex_one.x) - self.vertex_one.y;
+            side_onetwo = side(self, self.vertex_one_, self.vertex_two_);
+            y_onetwo = slope*x_onetwo + offset;
             
-            slope_side_onethree = (self.vertex_three.y - self.vertex_one.y)/(self.vertex_three.x - self.vertex_one.x);
-            y_side_onethree = slope_side_onethree*(x_onethree - self.vertex_one.x) - self.vertex_one.y;
+            side_onethree = side(self, self.vertex_one, self.vertex_three);
+            y_onethree = slope*x_onethree + offset;
             
-            slope_side_twothree = (self.vertex_three.y - self.vertex_two.y)/(self.vertex_three.x - self.vertex_two.x);
-            y_side_twothree = slope_side_twothree*(x_twothree - self.vertex_two.x) - self.vertex_two.y;
+            side_twothree = side(self, self.vertex_two, self.vertex_three);
+            y_twothree = slope*x_twothree + offset;         
         end
-                    
-    end    
+    
+        
+    end
+    
+      
 end

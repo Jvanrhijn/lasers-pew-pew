@@ -67,4 +67,15 @@ classdef Shape < handle
 
   end
 
+  methods(Access=protected)
+        
+        function [slope, offset] = side(self, v1, v2)
+            v_diff = v1 - v2;
+            angle = v_diff.angle_to_horizontal();
+            slope = tan(angle);
+            offset = v1.y - slope*v1.x
+        end
+        
+  end
+    
 end
