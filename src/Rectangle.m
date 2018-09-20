@@ -26,7 +26,8 @@ classdef Rectangle < Shape
           | (-self.width_/2 < xt & xt < self.width_/2 ...
             & dir.dot(Vec(0, 1)) < 0 & start.y > self.height_/2)...
           | (-self.width_/2 < xb & xb < self.width_/2 ...
-            & dir.dot(Vec(0, -1)) < 0 & start.y < -self.height_/2);
+            & dir.dot(Vec(0, -1)) < 0 & start.y < -self.height_/2)...
+          | self.inside(ray.start());
     end
 
     function [point, normal] = intersection_point(self, ray)
@@ -59,11 +60,19 @@ classdef Rectangle < Shape
         distance = inf;
         for i=1:length(intersections)
           sep = ray_moved.start() - intersections(i);
-          if sep.norm() < distance
-            distance = sep.norm();
-            point = intersections(i) + self.location_;
-            point.rotate(self.slant_);
-            normal = normals(i).rotate(self.slant_);
+          if ~self.inside(ray.start())
+            if sep.norm() < distance
+              distance = sep.norm();
+              point = intersections(i) + self.location_;
+              point.rotate(self.slant_);
+              normal = normals(i).rotate(self.slant_);
+            end
+          else
+            if normals(i).dot(ray_moved.direction()) > 0
+              point = intersections(i) + self.location_;
+              point.rotate(self.slant_);
+              normal = normals(i).rotate(self.slant_);
+            end
           end
         end
       else
