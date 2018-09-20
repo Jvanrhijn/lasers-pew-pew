@@ -34,13 +34,6 @@ classdef Shape < handle
     % vector there, in that order
     intersection_point(self, ray)
 
-    % Given the shape and a point p = (x, y),
-    % draw a line from the centroid to p.
-    % normal_vector returns the normal vector of
-    % the shape at the intersection point of the line
-    % and the shape boundary
-    normal_vector(self, point)
-
     % Checks whether a given point is located inside the shape
     % @param point Vec representing location of point
     % @return in True if point is inside shape
@@ -49,6 +42,14 @@ classdef Shape < handle
     % Moves the shape to the given point
     % @param point Point to move shape to
     move_to(self, point)
+
+  end
+
+  methods(Access=public)
+
+    function loc = location(self)
+      loc = self.location_;
+    end
 
   end
 
