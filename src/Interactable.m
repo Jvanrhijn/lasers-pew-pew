@@ -1,7 +1,7 @@
 classdef Interactable < handle
 
   properties(Constant)
-    r_index = 1.333;  % refractive index
+    r_index = 1.52;  % refractive index of crown glass
   end
 
   methods(Abstract)
