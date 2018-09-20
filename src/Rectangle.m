@@ -63,14 +63,14 @@ classdef Rectangle < Shape
           if ~self.inside(ray.start())
             if sep.norm() < distance
               distance = sep.norm();
-              point = intersections(i) + self.location_;
-              point.rotate(self.slant_);
+              point = intersections(i);
+              point = point.rotate(self.slant_) + self.location_;
               normal = normals(i).rotate(self.slant_);
             end
           else
             if normals(i).dot(ray_moved.direction()) > 0
-              point = intersections(i) + self.location_;
-              point.rotate(self.slant_);
+              point = intersections(i);
+              point = point.rotate(self.slant_) + self.location_;
               normal = normals(i).rotate(self.slant_);
             end
           end
