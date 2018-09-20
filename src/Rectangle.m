@@ -85,6 +85,10 @@ classdef Rectangle < Shape
       self.location_ = point
     end
 
+    function rotate(self, angle)
+      self.slant_ = angle;
+    end
+
     function [w, h] = width_height(self)
       w = self.width_;
       h = self.height_;
@@ -117,16 +121,6 @@ classdef Rectangle < Shape
       yr = slope*(self.width_/2) + offset;
       xt = (self.height_/2 - offset)/slope;
       xb = (-self.height_/2 - offset)/slope;
-    end
-  
-    function vertices = vertices(self)
-      % constructs vectors of the four vertices of the rectangle
-      % v1 is bottom left, rest follows counter-clockwise
-      v1 = self.location_ + Vec(-self.width_/2, -self.height_/2).rotate(self.slant_);
-      v2 = self.location_ + Vec(self.width_/2, -self.height_/2).rotate(self.slant_);
-      v3 = self.location_ + Vec(self.width_/2, self.height_/2).rotate(self.slant_); 
-      v4 = self.location_ + Vec(-self.width_/2, self.height_/2).rotate(self.slant_);
-      vertices = [v1, v2, v3, v4];
     end
 
   end
