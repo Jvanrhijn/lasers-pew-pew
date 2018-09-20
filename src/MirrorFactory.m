@@ -15,7 +15,7 @@ classdef MirrorFactory < ComponentFactory
     function r = build_rectangle(x, y, dims)
       s = Rectangle(Vec(x, y));
       s.set_dimensions(dims);
-      r = Mirror(s)
+      r = Mirror(s);
     end
     
   end

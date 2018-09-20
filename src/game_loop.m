@@ -2,13 +2,19 @@ clear all
 close all
 clc
 
-gs=GameState();
-lens = LensFactory.build_circle(0.4, 0.5, 0.1);
-mir = MirrorFactory.build_circle(0.2,0.6,0.3);
-gs.add_component(lens);
-gs.add_component(mir)
-gs.set_starting_ray(0,0.5,0.2);
-gs.draw_state();
+
+gs = build_level('level.txt');
+
+% 
+% gs=GameState();
+% lens = LensFactory.build_circle(0.4, 0.5, 0.1);
+% mir = MirrorFactory.build_circle(0.2,0.6,0.3);
+% rec = MirrorFactory.build_rectangle(0.2,0.2,[0.1, 0.5]);
+% gs.add_component(lens);
+% gs.add_component(mir);
+% gs.add_component(rec);
+% gs.set_starting_ray(0,0.5,0.2);
+% gs.draw_state();
 
 while true
 % objects = {Vec(1,2),Vec(3,4),Vec(2,5)};
@@ -46,7 +52,7 @@ end
 %find string describing object
 selected_object = objects{i_object};
 selected_centroid = selected_object.shape.location;
-plot(selected_centroid.x,selected_centroid.y,'.','MarkerSize',15)
+plot(selected_centroid.x,selected_centroid.y,'.r','MarkerSize',15)
 
 %ask user to apply action on object
 title(["Click on another location to move the object"])
