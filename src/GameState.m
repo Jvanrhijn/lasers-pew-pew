@@ -74,8 +74,9 @@ classdef GameState < handle
 
     function add_component(self, component)
     self.components_{end+1} = component;
-  end
-
+    end
+    
+    
   end
 
 end

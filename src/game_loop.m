@@ -4,17 +4,17 @@ clc
 
 gs=GameState();
 lens = LensFactory.build_circle(0.4, 0.5, 0.1);
+mir = MirrorFactory.build_circle(0.2,0.6,0.3);
 gs.add_component(lens);
-gs.set_starting_ray(0,0.5,0.1);
+gs.add_component(mir)
+gs.set_starting_ray(0,0.5,0.2);
 gs.draw_state();
 
-
-% while true
+while true
 % objects = {Vec(1,2),Vec(3,4),Vec(2,5)};
 objects = gs.components;
 N_objects = size(objects,2);
 
-gs.draw_state()
 
 % fig = figure;
 % hold all
@@ -23,9 +23,10 @@ gs.draw_state()
 % end
 
 %ask user to select an object
-disp('Select an object to manipulate')
+title('Select an object to manipulate')
 [xi,yi] = ginput(1);
 click_loc = Vec(xi,yi);
+
 
 for nn = 1:N_objects
     
@@ -44,17 +45,35 @@ end
 
 %find string describing object
 selected_object = objects{i_object};
-object_name = 'Object Name';
-disp(['Object "',object_name,'" selected'])
+selected_centroid = selected_object.shape.location;
+plot(selected_centroid.x,selected_centroid.y,'.','MarkerSize',15)
 
 %ask user to apply action on object
-disp(["Click on another location to move the object"])
+title(["Click on another location to move the object"])
 
-[xj,yj] = ginput(1);
-move_loc = Vec(xj,yj);
 
+while true
+    overlap=zeros(1,N_objects);
+    [xj,yj] = ginput(1);
+    move_loc = Vec(xj,yj);
+    
+    for mm = 1:N_objects
+        if mm==i_object %don't check if it overlaps itself
+            continue
+        elseif objects{mm}.shape.inside(move_loc)
+            % Check if location is inside other shapes
+            title("Location must be outside other objects!")
+            overlap(mm)=1;
+        end
+    end
+    if max(overlap)==0
+        break
+    end
+end
 %move object to desired location
 objects{i_object}.shape.move_to(move_loc)
+gs.draw_state()
 
+end
 %check if winning state has been reached
 %if true: exit loop
