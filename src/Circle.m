@@ -96,14 +96,13 @@ classdef Circle < Shape
       self.location_ = point;
     end
 
+    function rotate(self, angle)
+    end
+
     function nvec = normal_vector(self, point)
       line = point - self.location_;
       theta = atan2(line.y, line.x);
       nvec = Vec(cos(theta), sin(theta));
-    end
-
-    function loc = location(self)
-      loc = self.location_
     end
 
   end

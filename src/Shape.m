@@ -34,13 +34,6 @@ classdef Shape < handle
     % vector there, in that order
     intersection_point(self, ray)
 
-    % Given the shape and a point p = (x, y),
-    % draw a line from the centroid to p.
-    % normal_vector returns the normal vector of
-    % the shape at the intersection point of the line
-    % and the shape boundary
-    normal_vector(self, point)
-
     % Checks whether a given point is located inside the shape
     % @param point Vec representing location of point
     % @return in True if point is inside shape
@@ -49,6 +42,17 @@ classdef Shape < handle
     % Moves the shape to the given point
     % @param point Point to move shape to
     move_to(self, point)
+
+    % rotate the shape counter-clockwise about its centroidal axis
+    rotate(self, angle)
+
+  end
+
+  methods(Access=public)
+
+    function loc = location(self)
+      loc = self.location_;
+    end
 
   end
 
@@ -67,15 +71,14 @@ classdef Shape < handle
 
   end
 
-  methods(Access=protected)
-        
-      function [slope, offset] = side(self, v1, v2)
-        % find the slope and offset of a line through de side of an object  
-        v_diff = v1 - v2;
-        angle = v_diff.angle_to_horizontal();
-        slope = tan(angle);
-        offset = v1.y - slope*v1.x
-      end
+  methods(Access=protected)       
+
+    function [slope, offset] = side(self, v1, v2)
+      v_diff = v1 - v2;
+      angle = v_diff.angle_to_horizontal();
+      slope = tan(angle);
+      offset = v1.y - slope*v1.x
+    end
         
   end
     

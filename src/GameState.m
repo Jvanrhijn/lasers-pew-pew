@@ -2,8 +2,9 @@ classdef GameState < handle
 
   properties(GetAccess=private, SetAccess=private)
     level_nr_
-    components_
     starting_ray_
+    components_
+    max_reflections_ = 1000
   end 
 
   methods
@@ -21,12 +22,14 @@ classdef GameState < handle
       % start at the starting point
       active_rays = [self.starting_ray_];
       ray = self.starting_ray_; 
-      while true
+      num_reflections = 0;
+      while num_reflections < self.max_reflections_
         comp = self.find_closest(ray);
         % if a component was hit, add new ray to list of active rays
         if ~isempty(comp)
           ray = comp.interact_with(ray);
           active_rays = [active_rays, ray];
+          num_reflections = num_reflections + 1;
         else
           break;
         end
@@ -34,6 +37,7 @@ classdef GameState < handle
     end
 
     function draw_state(self)
+      clf;
       active_rays = self.trace_ray(); 
       g = Graphics();
       for c = self.components_
@@ -41,6 +45,10 @@ classdef GameState < handle
         g.draw(c);
       end
       g.draw(active_rays);
+    end
+
+    function cs = components(self)
+      cs = self.components_; 
     end
 
     function comp = find_closest(self, ray)

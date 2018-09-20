@@ -20,16 +20,19 @@ classdef Lens < Component
         angle_refr = self.interaction_type_.interact(angle_in);
         % to avoid the new ray intersecting the shape again,
         % move the new ray starting point inwards
-        f = self.shape.radius*eps;
+        point = point - Vec(normal.x*f, normal.y*f);
       else
         angle_in = ray.direction().angle(normal);
         angle_refr = self.interaction_type_.interact(-angle_in);
-        % to avoid the new ray intersecting the shape again,
-        % move the new ray starting point outwards
+        point = point + Vec(normal.x*f, normal.y*f);
       end
-      point = point + Vec(normal.x*f, normal.y*f);
-      new_direction = Vec(cos(angle_refr)*sign(ray_dir_rot.x),...
-                          sin(angle_refr)*sign(ray_dir_rot.y)).rotate(slant);
+      if angle_refr < 0
+        new_direction = Vec(-ray_dir_rot.x, ray_dir_rot.y).rotate(slant);
+        point = point - Vec(2*normal.x*f, 2*normal.y*f);
+      else
+        new_direction = Vec(cos(angle_refr)*sign(ray_dir_rot.x),...
+                            sin(angle_refr)*sign(ray_dir_rot.y)).rotate(slant);
+      end
       new_ray = Ray(point, new_direction.angle_to_horizontal());
     end
 
