@@ -86,7 +86,7 @@ classdef Rectangle < Shape
     end
 
     function rotate(self, angle)
-      self.slant_ = angle;
+      self.slant_ = self.slant_ + angle;
     end
 
     function [w, h] = width_height(self)
@@ -101,7 +101,7 @@ classdef Rectangle < Shape
     function in = inside(self, point)
       % rotate coordinates so rectangle has zero slant
       % and move coords so rectangle has centroid in origin
-      rot_rect_loc = self.location_.rotate(-self.slant_);
+      rot_rect_loc = Vec(self.location_.x, self.location_.y).rotate(-self.slant_);
       point_rot = Vec(point.x, point.y).rotate(-self.slant_) - rot_rect_loc;
       in = (-self.width_/2 < point_rot.x) & (point_rot.x < self.width_/2)...
          & (-self.height_/2 < point_rot.y) & (point_rot.y < self.height_/2);

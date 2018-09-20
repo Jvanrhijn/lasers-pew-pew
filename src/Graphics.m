@@ -88,7 +88,6 @@ classdef Graphics < handle
     end
 
     function [x, y] = rectangle_xy(self, rectangle)
-      res = 250;
       p = rectangle.location();  
       [w, h] = rectangle.width_height(); 
       s = rectangle.slant();
