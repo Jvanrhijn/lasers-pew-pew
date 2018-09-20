@@ -1,32 +1,13 @@
-clear all
-close all
-clc
+function g = game_loop(gs)
+% game_loop lets the user manipulate the game state in order to win the
+% game.
 
-
-gs = build_level('level.txt');
-
-% 
-% gs=GameState();
-% lens = LensFactory.build_circle(0.4, 0.5, 0.1);
-% mir = MirrorFactory.build_circle(0.2,0.6,0.3);
-% rec = MirrorFactory.build_rectangle(0.2,0.2,[0.1, 0.5]);
-% gs.add_component(lens);
-% gs.add_component(mir);
-% gs.add_component(rec);
-% gs.set_starting_ray(0,0.5,0.2);
-% gs.draw_state();
+% input: gs = a GameState object
+% output: g = a GameState object
 
 while true
-% objects = {Vec(1,2),Vec(3,4),Vec(2,5)};
 objects = gs.components;
 N_objects = size(objects,2);
-
-
-% fig = figure;
-% hold all
-% for qq = 1:N_objects
-%     plot(objects{qq}.x,objects{qq}.y,'.','MarkerSize',10)
-% end
 
 %ask user to select an object
 title('Select an object to manipulate')
@@ -43,11 +24,6 @@ for nn = 1:N_objects
    
     end
 end
-% else
-%         disp("Please click inside an object")
-
-
-
 
 %find string describing object
 selected_object = objects{i_object};

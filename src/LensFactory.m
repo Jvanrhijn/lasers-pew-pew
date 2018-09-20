@@ -15,7 +15,7 @@ classdef LensFactory < ComponentFactory
     function r = build_rectangle(x, y, dims)
       s = Rectangle(Vec(x, y));
       s.set_dimensions(dims);
-      r = Lens(s)
+      r = Lens(s);
     end
     
   end
