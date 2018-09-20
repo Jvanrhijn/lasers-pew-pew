@@ -2,14 +2,19 @@ clear all
 close all
 clc
 
-game_state=GameState()
+gs=GameState();
+lens = LensFactory.build_circle(0.4, 0.5, 0.1);
+gs.add_component(lens);
+gs.set_starting_ray(0,0.5,0.1);
+gs.draw_state();
+
 
 % while true
-objects = {Vec(1,2),Vec(3,4),Vec(2,5)};
-% objects = game_state.components;
-N_objects = size(objects,2)
+% objects = {Vec(1,2),Vec(3,4),Vec(2,5)};
+objects = gs.components;
+N_objects = size(objects,2);
 
-gamestate.draw_state
+gs.draw_state()
 
 % fig = figure;
 % hold all
@@ -23,20 +28,33 @@ disp('Select an object to manipulate')
 click_loc = Vec(xi,yi);
 
 for nn = 1:N_objects
-%     distance = objects{nn}-click_loc;
-    distance = objects{nn}.shape.location_ - click_loc;
-    norm_i(nn) = distance.norm;
+    
+    % Check if location is inside shape
+    if objects{nn}.shape.inside(click_loc)
+        i_object = nn;
+        break
+   
+    end
 end
+% else
+%         disp("Please click inside an object")
 
-%find the index of the nearest neighbor
-[~,i_neighb] = min(norm_i);
+
+
+
 %find string describing object
-selected_object = objects{i_neighb};
+selected_object = objects{i_object};
 object_name = 'Object Name';
 disp(['Object "',object_name,'" selected'])
 
-
 %ask user to apply action on object
+disp(["Click on another location to move the object"])
+
+[xj,yj] = ginput(1);
+move_loc = Vec(xj,yj);
+
+%move object to desired location
+objects{i_object}.shape.move_to(move_loc)
 
 %check if winning state has been reached
 %if true: exit loop
