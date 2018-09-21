@@ -9,7 +9,7 @@ The simplistic ray tracer implements refractio and both external and internal
 reflection. 
 
 <p align="center">
-   <img src="https://i.imgur.com/QvnSLhD.png">
+   <img src="https://i.imgur.com/x2HXmSE.png">
 </p>
 
 ### Requirements
