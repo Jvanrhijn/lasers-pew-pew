@@ -15,7 +15,8 @@ classdef Rectangle < Shape
 
     function int = intersects(self, ray)
       [xt, xb, yl, yr] = self.intersect_sides(ray);
-      ray_moved = Ray(ray.start() - self.location_, ray.angle() - self.slant_);
+      ray_moved_start = ray.start() - self.location_;
+      ray_moved = Ray(ray_moved_start.rotate(-self.slant_), ray.angle() - self.slant_);
       dir = ray_moved.direction();
       start = ray_moved.start();
       % tests for each side of the rectangle
@@ -32,7 +33,8 @@ classdef Rectangle < Shape
 
     function [point, normal] = intersection_point(self, ray)
       if self.intersects(ray)
-        ray_moved = Ray(ray.start() - self.location_, ray.angle() - self.slant_);
+        ray_moved_start = ray.start() - self.location_;
+        ray_moved = Ray(ray_moved_start.rotate(-self.slant_), ray.angle() - self.slant_);
         [slope, offset] = ray_moved.line();
         [xt, xb, yl, yr] = self.intersect_sides(ray);
         % check all sides
@@ -114,7 +116,8 @@ classdef Rectangle < Shape
     function [xt, xb, yl, yr] = intersect_sides(self, ray)
       % return ray intersection with lines extending from rectangle sides
       % move coorindates so rectangle is in origin and not slanted
-      ray_moved = Ray(ray.start() - self.location_, ray.angle() - self.slant_);
+      ray_moved_start = ray.start() - self.location_;
+      ray_moved = Ray(ray_moved_start.rotate(-self.slant_), ray.angle() - self.slant_);
       [slope, offset] = ray_moved.line();
       % calculate intersection at sides
       yl = slope*(-self.width_/2) + offset;
