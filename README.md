@@ -8,7 +8,9 @@ concepts of geometric optics in a playful fashion.
 The simplistic ray tracer implements refractio and both external and internal
 reflection. 
 
-![demo](https://i.imgur.com/QvnSLhD.png)
+<p align="center">
+   <img src="https://i.imgur.com/QvnSLhD.png">
+</p>
 
 ### Requirements
 
