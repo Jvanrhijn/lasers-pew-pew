@@ -23,7 +23,7 @@ classdef Mirror < Component
       % to avoid intersecting the same surface again, move point
       % outward slightly
       f = eps*1;
-      new_ray = Ray(point + Vec(normal.x*f, normal.y*f),...
+      new_ray = Ray(point - Vec(normal.x*f, normal.y*f),...
                     ray_vec_refl.angle_to_horizontal());
     end
 
