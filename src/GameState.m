@@ -30,6 +30,9 @@ classdef GameState < handle
           ray = comp.interact_with(ray);
           active_rays = [active_rays, ray];
           num_reflections = num_reflections + 1;
+          if isempty(ray.angle())
+            break;  % ray has hit blackbody or target
+          end
         else
           break;
         end
