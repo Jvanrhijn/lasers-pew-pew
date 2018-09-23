@@ -29,6 +29,8 @@ classdef Graphics < handle
         self.draw_mirror(obj);
       elseif isa(obj, 'Lens')
         self.draw_lens(obj);
+      elseif isa(obj, 'Target')
+        self.draw_target(obj);
       elseif isa(obj, 'BlackBody')
         self.draw_blackbody(obj);
       elseif isa(obj, 'Ray')
@@ -36,6 +38,17 @@ classdef Graphics < handle
       else
         error('Invalid data type for drawing');
       end
+    end
+
+    function draw_target(self, target)
+      if isa(target.shape, 'Circle')
+        [x, y] = self.circle_xy(target.shape);
+      elseif isa(target.shape, 'Rectangle')
+        [x, y] = self.rectangle_xy(target.shape);
+      else
+        error('Shape drawing not implemented for Target');
+      end
+      self.draw_shape(x, y, 'red', 'red'); 
     end
 
     function draw_blackbody(self, blackbody)

@@ -31,6 +31,9 @@ classdef GameState < handle
           active_rays = [active_rays, ray];
           num_reflections = num_reflections + 1;
           if isempty(ray.angle())
+            if (isa(comp, 'Target'))
+              disp('Target was hit!');
+            end
             break;  % ray has hit blackbody or target
           end
         else
@@ -79,8 +82,12 @@ classdef GameState < handle
     end
 
     function add_component(self, component)
-    self.components_{end+1} = component;
-  end
+      self.components_{end+1} = component;
+    end
+
+    function lvl = level_number(self)
+      lvl = self.level_nr_; 
+    end
 
   end
 
