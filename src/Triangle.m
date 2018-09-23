@@ -49,6 +49,12 @@ classdef Triangle < Shape
       
     end
     
+    function in = inside(self, point)
+    
+    
+    end
+    
+    
   end
   
   methods(Access=private)

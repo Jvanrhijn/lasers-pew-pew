@@ -5,20 +5,32 @@ classdef Vec < handle
   properties(SetAccess=protected)
     x
     y
+    z
   end
 
   methods
 
     % constructor
-    function self = Vec(x, y)
-      self.x = x;
-      self.y = y;
+    function self = Vec(varargin)
+      self.x = varargin{1};
+      self.y = varargin{2};
+      if length(varargin) > 2
+        self.z = varargin{3};
+      else
+        self.z = 0;
+      end
     end
 
     function val = dot(self, other)
       val = self.x*other.x + self.y*other.y;
     end
-
+    
+    function vec = cross(self, other)
+      vec = Vec(self.y*other.z - other.y*self.z,...
+                self.z*other.x - other.z*self.x,...
+                self.x*other.y - other.x*self.y);
+    end
+        
     function val = norm(self)
       val = sqrt(self.dot(self));
     end
@@ -53,7 +65,11 @@ classdef Vec < handle
     function vec = minus(self, other)
       vec = Vec(self.x-other.x, self.y-other.y);
     end
-
+    
+    function vec = uminus(self)
+      vec = Vec(-self.x, -self.y, -self.z);
+    end
+        
   end
 
 end
