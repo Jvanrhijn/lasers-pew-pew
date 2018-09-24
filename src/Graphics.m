@@ -119,8 +119,8 @@ classdef Graphics < handle
       p = rectangle.location();  
       [w, h] = rectangle.width_height(); 
       s = rectangle.slant();
-      x = [-w/2, w/2, w/2, -w/2];
-      y = [-h/2, -h/2, h/2, h/2];
+      x = [-w/2, w/2, w/2, -w/2, -w/2];
+      y = [-h/2, -h/2, h/2, h/2, -h/2];
       xrot = x*cos(s) - y*sin(s);
       yrot = x*sin(s) + y*cos(s);
       x = xrot + p.x;
