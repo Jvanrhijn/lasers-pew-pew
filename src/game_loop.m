@@ -1,9 +1,8 @@
-function g = game_loop(gs)
+function game_loop(gs)
 % game_loop lets the user manipulate the game state in order to win the
 % game.
 
 % input: gs = a GameState object
-% output: g = a GameState object
 
 while true
 objects = gs.components;

@@ -4,6 +4,7 @@ classdef GameState < handle
     level_nr_
     starting_ray_
     components_
+    graphics_;
     max_reflections_ = 1000
   end 
 
@@ -12,6 +13,7 @@ classdef GameState < handle
     % constructor
     function self = GameState()
       self.level_nr_ = 1;  
+      self.graphics_ = Graphics();
     end
 
     function set_starting_ray(self, x, y, angle)
@@ -87,6 +89,10 @@ classdef GameState < handle
 
     function lvl = level_number(self)
       lvl = self.level_nr_; 
+    end
+
+    function fig = figure(self)
+      fig = self.graphics_.get_figure();
     end
 
   end

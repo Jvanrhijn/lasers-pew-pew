@@ -147,6 +147,10 @@ classdef Graphics < handle
       self.set_range([self.xlims_, self.ylims_]);
     end
 
+    function fig = get_figure(self)
+      fig = self.fig_;
+    end
+
   end
 
 end
