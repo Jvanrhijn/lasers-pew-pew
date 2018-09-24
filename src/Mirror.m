@@ -1,9 +1,5 @@
 classdef Mirror < Component
 
-  properties
-    
-  end
-
   methods
 
     function self = Mirror(shape)

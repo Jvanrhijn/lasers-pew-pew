@@ -43,6 +43,9 @@ classdef Shape < handle
     % @param point Point to move shape to
     move_to(self, point)
 
+    % rotate the shape counter-clockwise about its centroidal axis
+    rotate(self, angle)
+
   end
 
   methods(Access=public)
@@ -68,14 +71,14 @@ classdef Shape < handle
 
   end
 
-  methods(Access=protected)
-        
-        function [slope, offset] = side(self, v1, v2)
-            v_diff = v1 - v2;
-            angle = v_diff.angle_to_horizontal();
-            slope = tan(angle);
-            offset = v1.y - slope*v1.x
-        end
+  methods(Access=protected)       
+
+    function [slope, offset] = side(self, v1, v2)
+      v_diff = v1 - v2;
+      angle = v_diff.angle_to_horizontal();
+      slope = tan(angle);
+      offset = v1.y - slope*v1.x
+    end
         
   end
     

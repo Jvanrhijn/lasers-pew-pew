@@ -64,7 +64,18 @@ classdef TestVec < matlab.unittest.TestCase
         self.assertEqual(dot, vector_1.x*vector_2.x + vector_2.y*vector_1.y);
       end
     end
-
+    
+    function test_cross(self)
+      for i=1:100
+        u = Vec(rand(), rand());
+        v = Vec(rand(), rand());
+        
+        self.assertEqual(u.cross(v), -v.cross(u));
+        self.assertEqual(u.cross(v).dot(v), 0, 'AbsTol', 1e-15);
+      end
+      self.assertEqual(Vec(1, 0).cross(Vec(0, 1)), Vec(0, 0, 1));
+    end
+    
   end
 
 end

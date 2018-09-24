@@ -32,6 +32,10 @@ classdef Graphics < handle
         self.draw_mirror(obj);
       elseif isa(obj, 'Lens')
         self.draw_lens(obj);
+      elseif isa(obj, 'Target')
+        self.draw_target(obj);
+      elseif isa(obj, 'BlackBody')
+        self.draw_blackbody(obj);
       elseif isa(obj, 'Ray')
         self.draw_ray_set(obj);
       else
@@ -39,16 +43,37 @@ classdef Graphics < handle
       end
     end
 
+    function draw_target(self, target)
+      if isa(target.shape, 'Circle')
+        [x, y] = self.circle_xy(target.shape);
+      elseif isa(target.shape, 'Rectangle')
+        [x, y] = self.rectangle_xy(target.shape);
+      else
+        error('Shape drawing not implemented for Target');
+      end
+      self.draw_shape(x, y, 'red', 'red'); 
+    end
+
+    function draw_blackbody(self, blackbody)
+      if isa(blackbody.shape, 'Circle')
+        [x, y] = self.circle_xy(blackbody.shape);
+      elseif isa(blackbody.shape, 'Rectangle')
+        [x, y] = self.rectangle_xy(blackbody.shape);
+      else
+        error('Shape drawing not implemented for BlackBody');
+      end
+      self.draw_shape(x, y, 'black', [0, 0, 0]);
+    end
+
     function draw_mirror(self, mirror)
       if isa(mirror.shape, 'Circle')
         [x, y] = self.circle_xy(mirror.shape);
-        self.draw_shape(x, y, 'cyan', [0.5, 0.5, 0.5]);
       elseif isa(mirror.shape, 'Rectangle')
         [x, y] = self.rectangle_xy(mirror.shape);
-        self.draw_shape(x, y, 'cyan', [0.5, 0.5, 0.5]);
       else
         error('Shape drawing not implemented');
       end
+        self.draw_shape(x, y, 'cyan', [0.5, 0.5, 0.5]);
     end
 
     function draw_lens(self, lens)
@@ -91,7 +116,6 @@ classdef Graphics < handle
     end
 
     function [x, y] = rectangle_xy(self, rectangle)
-      res = 250;
       p = rectangle.location();  
       [w, h] = rectangle.width_height(); 
       s = rectangle.slant();
@@ -105,6 +129,9 @@ classdef Graphics < handle
 
     function draw_ray(self, ray)
       angle = ray.angle();
+      if isempty(angle)
+        return;
+      end
       start = ray.start();
       [m, b] = ray.line();
       if (-pi/2 <= angle) & (angle < pi/2)
