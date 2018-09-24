@@ -102,7 +102,7 @@ classdef Graphics < handle
         xs(i) = vertex.x;
         ys(i) = vertex.y;
       end
-      plot(xs, ys, 'r');
+      plot(xs, ys, 'r', 'LineWidth', 2);
       self.draw_ray(rays(end));
       self.set_range([self.xlims_, self.ylims_]);
     end
@@ -143,7 +143,7 @@ classdef Graphics < handle
       end
       xs = [xmin, xmax];
       ys = m*xs + b;
-      plot(xs, ys, 'r');
+      plot(xs, ys, 'r', 'LineWidth', 2);
       self.set_range([self.xlims_, self.ylims_]);
     end
 

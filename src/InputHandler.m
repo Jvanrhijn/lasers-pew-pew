@@ -36,22 +36,21 @@ classdef InputHandler < handle
     function wbdcb(self, src, callbackdata)
       ax = gca;
       cp = ax.CurrentPoint;
-      xinit = cp(1, 1);
-      yinit = cp(1, 2);
       point = Vec(cp(1, 1), cp(1, 2));
       c = self.get_selected_component(point);
       if isempty(c)
         return;
       end
-      src.WindowButtonMotionFcn = @(x, y)(self.wbmcb(x, y));
+      offset = point - c.shape.location();
+      src.WindowButtonMotionFcn = @(x, y)(self.wbmcb(offset, x, y));
       src.WindowButtonUpFcn = @(x, y)(self.wbucb(x, y));
     end
 
-    function wbmcb(self, src, callbackdata)
+    function wbmcb(self, offset, src, callbackdata)
       ax = gca;
       cp = ax.CurrentPoint;
       p = Vec(cp(1, 1), cp(1, 2));
-      self.selected_obj_.shape.move_to(p);
+      self.selected_obj_.shape.move_to(p - offset);
       self.game_state_.draw_state();
     end
 
@@ -65,7 +64,10 @@ classdef InputHandler < handle
       cp = ax.CurrentPoint;
       p = Vec(cp(1, 1), cp(1, 2));
       c = self.get_selected_component(p);
-      c.shape.rotate(sign(callbackdata.VerticalScrollCount)*pi/20);
+      if isempty(c)
+        return;
+      end
+      c.shape.rotate(sign(callbackdata.VerticalScrollCount)*pi/50);
       self.game_state_.draw_state();
     end
 
