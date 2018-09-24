@@ -12,6 +12,9 @@ classdef Graphics < handle
       self.fig_ = gcf;
       hold on;
       self.set_range([0, 1, 0, 1]);
+      grid on
+      yticks(linspace(0,1,6));
+      xticks(linspace(0,1,6));
     end
 
     function set_range(self, ranges)
@@ -142,6 +145,10 @@ classdef Graphics < handle
       ys = m*xs + b;
       plot(xs, ys, 'r');
       self.set_range([self.xlims_, self.ylims_]);
+    end
+
+    function fig = get_figure(self)
+      fig = self.fig_;
     end
 
   end

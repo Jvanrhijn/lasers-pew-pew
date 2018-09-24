@@ -84,11 +84,11 @@ classdef Rectangle < Shape
     end
 
     function move_to(self, point)
-      self.location_ = point
+      self.location_ = point;
     end
 
     function rotate(self, angle)
-      self.slant_ = self.slant_ + angle;
+      self.slant_ = mod(self.slant_ + angle, pi);
     end
 
     function [w, h] = width_height(self)
@@ -129,3 +129,4 @@ classdef Rectangle < Shape
   end
 
 end
+

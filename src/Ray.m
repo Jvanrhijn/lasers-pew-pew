@@ -17,6 +17,7 @@ classdef Ray < handle
       vec = Vec(cos(self.angle_), sin(self.angle_));
     end
 
+    
     function [slope, offset] = line(self)
       % return line representation of ray, y = slope*x + offset
       slope = tan(self.angle_);
