@@ -15,6 +15,26 @@ classdef Component < handle
         self.shape = shape;
     end
 
+    function loc = location(self)
+      loc = self.shape.location();
+    end
+
+    function move_to(self, point)
+      self.shape.move_to(point);
+    end
+
+    function self = rotate(self, angle)
+      self.shape.rotate(angle);
+    end
+    
+    function [point, normal] = intersection_point(self, ray)
+      [point, normal] = self.shape.intersection_point(ray);
+    end
+
+    function in = inside(self, point)
+      in = self.shape.inside(point);
+    end
+
   end
 
   methods(Abstract)

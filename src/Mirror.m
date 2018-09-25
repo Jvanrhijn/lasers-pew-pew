@@ -7,7 +7,7 @@ classdef Mirror < Component
     end
 
     function new_ray = interact_with(self, ray)
-      [point, normal] = self.shape.intersection_point(ray);
+      [point, normal] = self.intersection_point(ray);
       % since this is a mirror, normal.dot(ray.direction) < 0
       % the incident angle is then
       angle_incident = pi - normal.angle(ray.direction());

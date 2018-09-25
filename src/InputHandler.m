@@ -1,7 +1,6 @@
 classdef InputHandler < handle
 
   properties
-    state_
     button_
     point_
     selected_obj_
@@ -11,7 +10,6 @@ classdef InputHandler < handle
   methods
 
     function self = InputHandler(game_state)
-      self.state_ = InputState.IDLE;
       self.game_state_ = game_state;
     end
 
@@ -22,14 +20,12 @@ classdef InputHandler < handle
       fig.WindowScrollWheelFcn = @(x, y)(self.wbswcb(x, y));
     end
 
-    function get_input(self)
-      [x, y, button] = ginput(1);
-      self.point_ = Vec(x, y);
-      self.button_ = button;
-    end
+  end
+
+  methods(Access=protected)
 
     function rotate_current(self, amount)
-      self.selected_obj_.shape.rotate(-sign(amount)*pi/50);
+      self.selected_obj_.rotate(-sign(amount)*pi/50);
       self.game_state_.draw_state();
     end
 
@@ -41,7 +37,7 @@ classdef InputHandler < handle
       if isempty(c)
         return;
       end
-      offset = point - c.shape.location();
+      offset = point - c.location();
       src.WindowButtonMotionFcn = @(x, y)(self.wbmcb(offset, x, y));
       src.WindowButtonUpFcn = @(x, y)(self.wbucb(x, y));
     end
@@ -50,7 +46,7 @@ classdef InputHandler < handle
       ax = gca;
       cp = ax.CurrentPoint;
       p = Vec(cp(1, 1), cp(1, 2));
-      self.selected_obj_.shape.move_to(p - offset);
+      self.selected_obj_.move_to(p - offset);
       self.game_state_.draw_state();
     end
 
@@ -67,18 +63,14 @@ classdef InputHandler < handle
       if isempty(c)
         return;
       end
-      c.shape.rotate(sign(callbackdata.VerticalScrollCount)*pi/50);
+      c.rotate(sign(callbackdata.VerticalScrollCount)*pi/50);
       self.game_state_.draw_state();
     end
 
-  end
-
-  methods(Access=private)
-    
     function comp = get_selected_component(self, point)
       comp = [];
       for c = self.game_state_.components()
-        if c{1}.shape.inside(point)
+        if c{1}.inside(point)
           self.selected_obj_ = c{1};
           comp = c{1};
           break;

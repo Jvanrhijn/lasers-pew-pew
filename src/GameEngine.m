@@ -1,9 +1,8 @@
-classdef GameState < handle
+classdef GameEngine < handle
 
   properties(GetAccess=private, SetAccess=private)
-    level_nr_
-    starting_ray_
-    components_
+    level_
+    levels_
     graphics_;
     max_reflections_ = 1000
   end 
@@ -11,19 +10,23 @@ classdef GameState < handle
   methods
     
     % constructor
-    function self = GameState()
-      self.level_nr_ = 1;  
+    function self = GameEngine()
       self.graphics_ = Graphics();
     end
 
-    function set_starting_ray(self, x, y, angle)
-      self.starting_ray_ = Ray(Vec(x, y), angle);
+    function start(self)
+      inp = InputHandler(self);
+      inp.start();
+    end
+
+    function set_level(self, level)
+      self.level_ = level;
     end
 
     function active_rays = trace_ray(self)
       % start at the starting point
-      active_rays = [self.starting_ray_];
-      ray = self.starting_ray_; 
+      active_rays = [self.level_.starting_ray()];
+      ray = active_rays(end);
       num_reflections = 0;
       while num_reflections < self.max_reflections_
         comp = self.find_closest(ray);
@@ -34,7 +37,7 @@ classdef GameState < handle
           num_reflections = num_reflections + 1;
           if isempty(ray.angle())
             if (isa(comp, 'Target'))
-              disp('Target was hit!');
+              self.next_level()
             end
             break;  % ray has hit blackbody or target
           end
@@ -48,15 +51,10 @@ classdef GameState < handle
       clf;
       active_rays = self.trace_ray(); 
       g = Graphics();
-      for c = self.components_
-        c = c{1};
-        g.draw(c);
+      for c = self.level_.components_
+        g.draw(c{1});
       end
       g.draw(active_rays);
-    end
-
-    function cs = components(self)
-      cs = self.components_; 
     end
 
     function comp = find_closest(self, ray)
@@ -64,9 +62,8 @@ classdef GameState < handle
       distance = inf;
       % set current component to 'null'
       cur_component = [];
-      for c = self.components_
-        c = c{1}; % honestly I hate matlab so much
-        [point, n] = c.shape.intersection_point(ray);
+      for c = self.level_.components()
+        [point, n] = c{1}.intersection_point(ray);
         % if the current ray intersects this component
         if ~isempty(point.x)
           % compute distance between ray start and intersection
@@ -76,23 +73,32 @@ classdef GameState < handle
             % if this distance is smaller than all previous ones,
             % set component to current
             distance = dist_to_comp;
-            cur_component = c;
+            cur_component = c{1};
           end
         end
       end
       comp = cur_component;
     end
 
-    function add_component(self, component)
-      self.components_{end+1} = component;
-    end
-
-    function lvl = level_number(self)
-      lvl = self.level_nr_; 
-    end
-
     function fig = figure(self)
       fig = self.graphics_.get_figure();
+    end
+
+    function comp = components(self)
+      comp = self.level_.components();
+    end
+
+    function load_levels(self, lvls)
+      self.levels_ = lvls; 
+    end
+
+    function next_level(self)
+      if self.level_.get_id() == length(self.levels_)
+        title('Congratulations, you finished the game!');
+        return;
+      end
+      self.level_ = self.levels_(self.level_.get_id()+1);
+      self.draw_state();
     end
 
   end
