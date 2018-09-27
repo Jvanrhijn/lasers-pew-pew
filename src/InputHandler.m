@@ -20,6 +20,13 @@ classdef InputHandler < handle
       fig.WindowScrollWheelFcn = @(x, y)(self.wbswcb(x, y));
     end
 
+    function stop(self)
+      fig = gcf;
+      fig.WindowButtonMotionFcn = '';
+      fig.WindowButtonDownFcn = '';
+      fig.WindowScrollWheelFcn = '';
+    end
+
   end
 
   methods(Access=protected)

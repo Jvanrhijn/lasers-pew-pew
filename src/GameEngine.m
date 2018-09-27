@@ -3,8 +3,10 @@ classdef GameEngine < handle
   properties(GetAccess=private, SetAccess=private)
     level_
     levels_
-    graphics_;
+    graphics_
     max_reflections_ = 1000
+    inp_
+    state_
   end 
 
   methods
@@ -12,11 +14,12 @@ classdef GameEngine < handle
     % constructor
     function self = GameEngine()
       self.graphics_ = Graphics();
+      self.state_ = GameState.LEVEL_PLAY;
     end
 
     function start(self)
-      inp = InputHandler(self);
-      inp.start();
+      self.inp_ = InputHandler(self);
+      self.inp_.start();
     end
 
     function set_level(self, level)
@@ -49,12 +52,17 @@ classdef GameEngine < handle
 
     function draw_state(self)
       clf;
-      active_rays = self.trace_ray(); 
-      g = Graphics();
-      for c = self.level_.components_
-        g.draw(c{1});
-      end
-      g.draw(active_rays);
+      switch self.state_
+        case GameState.LEVEL_PLAY
+          active_rays = self.trace_ray(); 
+          g = Graphics();
+          for c = self.level_.components_
+            g.draw(c{1});
+          end
+          g.draw(active_rays);
+        otherwise
+          return;
+        end
     end
 
     function comp = find_closest(self, ray)
@@ -95,6 +103,7 @@ classdef GameEngine < handle
     function next_level(self)
       if self.level_.get_id() == length(self.levels_)
         title('Congratulations, you finished the game!');
+        self.inp_.stop();
         return;
       end
       self.level_ = self.levels_(self.level_.get_id()+1);
