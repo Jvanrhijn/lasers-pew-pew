@@ -14,7 +14,6 @@ classdef InputHandler < handle
     end
 
     function start(self)
-      self.game_state_.draw_state();
       fig = gcf;
       fig.WindowButtonDownFcn = @(x, y)(self.wbdcb(x, y));
       fig.WindowScrollWheelFcn = @(x, y)(self.wbswcb(x, y));
@@ -33,7 +32,6 @@ classdef InputHandler < handle
 
     function rotate_current(self, amount)
       self.selected_obj_.rotate(-sign(amount)*pi/50);
-      self.game_state_.draw_state();
     end
 
     function wbdcb(self, src, callbackdata)
@@ -54,7 +52,6 @@ classdef InputHandler < handle
       cp = ax.CurrentPoint;
       p = Vec(cp(1, 1), cp(1, 2));
       self.selected_obj_.move_to(p - offset);
-      self.game_state_.draw_state();
     end
 
     function wbucb(self, src, callbackdata)
@@ -71,7 +68,6 @@ classdef InputHandler < handle
         return;
       end
       c.rotate(sign(callbackdata.VerticalScrollCount)*pi/50);
-      self.game_state_.draw_state();
     end
 
     function comp = get_selected_component(self, point)

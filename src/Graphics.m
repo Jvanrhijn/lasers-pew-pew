@@ -26,6 +26,13 @@ classdef Graphics < handle
       pbaspect([dx, dy, dz]/max([dx, dy, dz]));
     end
 
+    function draw_main_menu(self, start_button_callback)
+      start_button = uicontrol('Parent',self.get_figure(),'Style',...
+            'pushbutton','String','Start game','Units','normalized','Position',...
+            [0.5 0.5 0.1 0.1],'Visible','on');
+      start_button.Callback = start_button_callback;
+    end
+
     function draw(self, obj)
       if isa(obj, 'Mirror')
         self.draw_mirror(obj);
@@ -109,7 +116,7 @@ classdef Graphics < handle
     function [x, y] = circle_xy(self, circle)
       r = circle.radius;
       p = circle.location();
-      theta = linspace(0, 2*pi, 1000);
+      theta = linspace(0, 2*pi, 100);
       x = r*cos(theta) + p.x;
       y = r*sin(theta) + p.y;
     end

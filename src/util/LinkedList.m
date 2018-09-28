@@ -1,6 +1,6 @@
 classdef LinkedList < handle
 
-  properties(GetAccess=private, SetAccess=private)
+  properties
     start_ 
   end
 
