@@ -20,9 +20,9 @@ classdef GameEngine < handle
 
       % setup game loop timer
       self.timer_ = timer();
-      self.timer_.ExecutionMode = 'fixedDelay';
-      % refresh rate = 15 Hz (needs improvement)
-      self.timer_.Period = 0.06;
+      self.timer_.ExecutionMode = 'fixedRate';
+      % refresh rate = 30 Hz
+      self.timer_.Period = 1/40;
       % callback: drawing the state
       self.timer_.TimerFcn = @(x, y)(self.draw_state());
     end
@@ -47,15 +47,24 @@ classdef GameEngine < handle
       comp = self.level_node_.value().components();
     end
 
+    function fig = figure(self)
+      fig = self.graphics_.get_figure();
+    end
+
   end
 
   methods(Access=private)
 
     function start_game(self)
-      disp('start game');
       self.state_ = GameState.LEVEL_PLAY;
+      clf;
       self.inp_.start();
       start(self.timer_);
+    end
+
+    function stop(self)
+      clear all;
+      close all;
     end
 
     function active_rays = trace_ray(self)
@@ -83,20 +92,23 @@ classdef GameEngine < handle
     end
 
     function draw_state(self)
-      clf;
+      cla;
       switch self.state_
         case GameState.LEVEL_PLAY
           hold on;
           active_rays = self.trace_ray(); 
-          %self.graphics_ = Graphics();
           for c = self.level_node_.value().components_
             self.graphics_.draw(c{1});
           end
           self.graphics_.draw(active_rays);
+          ax = gca;
+          set(get(ax, 'Children'), 'HitTest', 'off', 'PickableParts', 'none');
         case GameState.MAIN_MENU
           self.timer_.stop();
           self.inp_.stop();
-          self.graphics_.draw_main_menu(@(src, event)(self.start_game()));
+          clf;
+          self.graphics_.draw_main_menu(@(~, ~)(self.start_game()),...
+                                        @(~, ~)(self.stop()));
         otherwise
           return;
         end
@@ -125,10 +137,6 @@ classdef GameEngine < handle
       comp = cur_component;
     end
 
-    function fig = figure(self)
-      fig = self.graphics_.get_figure();
-    end
-
     function next_level(self)
       self.level_node_ = self.level_node_.next();
       if isempty(self.level_node_)
@@ -142,7 +150,6 @@ classdef GameEngine < handle
         self.level_node_ = self.levels_.get_node(1);
         % draw menu
         self.draw_state();
-        return;
       end
     end
 
