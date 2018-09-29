@@ -22,7 +22,7 @@ classdef GameEngine < handle
       self.timer_ = timer();
       self.timer_.ExecutionMode = 'fixedRate';
       % refresh rate = 30 Hz
-      self.timer_.Period = 1/40;
+      self.timer_.Period = 1/25;
       % callback: drawing the state
       self.timer_.TimerFcn = @(x, y)(self.draw_state());
     end
@@ -141,15 +141,6 @@ classdef GameEngine < handle
       self.level_node_ = self.level_node_.next();
       if isempty(self.level_node_)
         title('Congratulations, you finished the game!');
-% <<<<<<< HEAD
-%         sound_of_victory = load('gong');
-%         sound(sound_of_victory.y,sound_of_victory.Fs)
-%         return;
-%       end
-%       self.level_ = self.levels_(self.level_.get_id()+1);
-%       self.draw_state();
-%       
-% =======
         % stop input handler and timer
         self.inp_.stop();
         stop(self.timer_);

@@ -7,7 +7,7 @@ addpath('src/util');
 %gs = build_level('level.txt');
 %gs = game_loop(gs);
 
-% % Build levels in directory
+% % Build levels in directory 'levels'
 levels = levels_setup('levels');
 
 % initialize game engine
