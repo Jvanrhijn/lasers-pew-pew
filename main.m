@@ -3,7 +3,6 @@ close all
 clc
 addpath('src');
 addpath('src/util');
-addpath('levels');
 
 %gs = build_level('level.txt');
 %gs = game_loop(gs);
@@ -25,7 +24,7 @@ addpath('levels');
 % levels = [level_one, level_two];
 
 % % Build levels in directory
-levels = build_level('levels');
+levels = levels_setup('levels');
 
 % initialize game engine
 ge = GameEngine();
