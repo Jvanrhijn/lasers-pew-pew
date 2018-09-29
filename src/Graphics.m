@@ -10,7 +10,6 @@ classdef Graphics < handle
 
     function self = Graphics()
       self.fig_ = figure;
-      hold on;
       self.set_range([0, 1, 0, 1]);
     end
 
