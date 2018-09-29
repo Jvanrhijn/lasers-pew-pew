@@ -28,9 +28,23 @@ level_name = D.name;
 fid = fopen(level_name);
 fcontents = textscan(fid, '%f %s %f %f %f %f %f %f', 'headerLines', 1, 'TreatAsEmpty', 'none');
 fclose(fid);
-
 fields = {'n_object', 'type', 'x', 'y', 'dim1', 'dim2', 'dim3', 'dim4'};
 level_data = cell2struct(fcontents, fields, 2);
+
+% obtain size of all fields
+level_data_sizes = zeros(1,numel(fcontents));
+i=1;
+for column = fcontents
+    level_data_sizes(i) = numel(column{1});
+    i=i+1;
+end
+
+if min(level_data_sizes)~=max(level_data.n_object) %if a value is formatted incorrectly it will not be read: level_data_sizes is smaller
+    error(['Level input file: ',level_name,' cannot be read correctly'])
+elseif max(level_data_sizes)==0
+    error(['Level input file: ',level_name,' is empty or formatted incorrectly'])
+end
+
 level_data.level_id=str2double(level_name(6));
 end
 
