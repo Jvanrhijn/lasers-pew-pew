@@ -14,7 +14,7 @@ classdef BlackBodyFactory < ComponentFactory
     function r = build_rectangle(x, y, dims)
       s = Rectangle(Vec(x, y));
       s.set_dimensions(dims);
-      r = BlackBody(s)
+      r = BlackBody(s);
     end
 
   end

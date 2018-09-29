@@ -22,7 +22,7 @@ classdef GameEngine < handle
       self.timer_ = timer();
       self.timer_.ExecutionMode = 'fixedRate';
       % refresh rate = 30 Hz
-      self.timer_.Period = 1/40;
+      self.timer_.Period = 1/25;
       % callback: drawing the state
       self.timer_.TimerFcn = @(x, y)(self.draw_state());
     end
@@ -146,6 +146,9 @@ classdef GameEngine < handle
         stop(self.timer_);
         % return to main menu
         self.state_ = GameState.MAIN_MENU;
+        % play sound of victory
+        sound_of_victory = load('gong');
+        sound(sound_of_victory.y,sound_of_victory.Fs)
         % reset level to level 1
         self.level_node_ = self.levels_.get_node(1);
         % draw menu
