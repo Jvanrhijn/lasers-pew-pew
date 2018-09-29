@@ -95,10 +95,13 @@ classdef GameEngine < handle
     function next_level(self)
       if self.level_.get_id() == length(self.levels_)
         title('Congratulations, you finished the game!');
+        sound_of_victory = load('gong');
+        sound(sound_of_victory.y,sound_of_victory.Fs)
         return;
       end
       self.level_ = self.levels_(self.level_.get_id()+1);
       self.draw_state();
+      
     end
 
   end
