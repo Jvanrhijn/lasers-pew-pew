@@ -20,9 +20,9 @@ classdef GameEngine < handle
 
       % setup game loop timer
       self.timer_ = timer();
-      self.timer_.ExecutionMode = 'fixedRate';
+      self.timer_.ExecutionMode = 'fixedSpacing';
       % refresh rate = 30 Hz
-      self.timer_.Period = 1/25;
+      self.timer_.Period = 1/60;
       % callback: drawing the state
       self.timer_.TimerFcn = @(x, y)(self.draw_state());
     end
