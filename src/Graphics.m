@@ -9,11 +9,9 @@ classdef Graphics < handle
   methods
 
     function self = Graphics()
-      self.fig_ = gcf;
+      self.fig_ = figure;
       hold on;
       self.set_range([0, 1, 0, 1]);
-      yticks(linspace(0,1,6));
-      xticks(linspace(0,1,6));
     end
 
     function set_range(self, ranges)
@@ -24,6 +22,17 @@ classdef Graphics < handle
       dy = self.ylims_(2) - self.ylims_(1);
       dz = 1;
       pbaspect([dx, dy, dz]/max([dx, dy, dz]));
+    end
+
+    function draw_main_menu(self, start_button_callback, quit_callback)
+      start_button = uicontrol('Parent', self.fig_,...
+            'String', 'Start game', 'Units', 'normalized',...
+            'Position', [0.5 0.5 0.2 0.1]);
+      start_button.Callback = start_button_callback;
+      quit_button = uicontrol('Parent', self.fig_,...
+            'String', 'Quit', 'Units', 'normalized',...
+            'Position', [0.5 0.4 0.2 0.1]);
+      quit_button.Callback = quit_callback;
     end
 
     function draw(self, obj)
@@ -88,8 +97,8 @@ classdef Graphics < handle
     end
 
     function draw_shape(self, x, y, edge_color, fill_color)
-      fill(x, y, fill_color);
-      plot(x, y, edge_color, 'LineWidth', 2);
+      f = fill(x, y, fill_color);
+      p = plot(x, y, edge_color, 'LineWidth', 2);
       self.set_range([self.xlims_, self.ylims_]);
     end
 
@@ -109,7 +118,7 @@ classdef Graphics < handle
     function [x, y] = circle_xy(self, circle)
       r = circle.radius;
       p = circle.location();
-      theta = linspace(0, 2*pi, 1000);
+      theta = linspace(0, 2*pi, 100);
       x = r*cos(theta) + p.x;
       y = r*sin(theta) + p.y;
     end
@@ -148,6 +157,10 @@ classdef Graphics < handle
 
     function fig = get_figure(self)
       fig = self.fig_;
+    end
+
+    function ax = get_axes(self)
+      ax = self.fig_.CurrentAxes;
     end
 
   end

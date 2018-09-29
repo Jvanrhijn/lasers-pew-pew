@@ -13,6 +13,5 @@ levels = levels_setup('levels');
 % initialize game engine
 ge = GameEngine();
 ge.load_levels(levels);
-ge.set_level(levels(1));
 ge.start();
 
