@@ -33,7 +33,6 @@ classdef InputHandler < handle
   methods(Access=protected)
 
     function wbdcb(self, src, callbackdata)
-      disp('wbdcb');
       ax = self.game_state_.figure().CurrentAxes;
       cp = ax.CurrentPoint;
       point = Vec(cp(1, 1), cp(1, 2));
