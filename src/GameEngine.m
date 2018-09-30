@@ -62,6 +62,12 @@ classdef GameEngine < handle
       start(self.timer_);
     end
     
+    function start_selection(self)
+      self.state_ = GameState.LEVEL_SELECT;
+      clf;
+      self.draw_state();
+    end
+    
     function set_refresh_rate(self,period)
         self.timer_.Period = period;
     end
@@ -118,6 +124,11 @@ classdef GameEngine < handle
           clf;
           self.graphics_.draw_main_menu(@(~, ~)(self.start_game()),...
                                         @(~, ~)(self.stop()), @(~,~)(self.start_potato_game(self.graphics_.get_potato_value())));
+        case GameState.LEVEL_SELECT
+          self.timer_.stop();
+          self.inp_.stop();
+          clf;
+          self.graphics_.draw_level_select(self.levels_, @(~,~)(self.set_level()))
         otherwise
           return;
         end
@@ -153,6 +164,7 @@ classdef GameEngine < handle
         % stop input handler and timer
         self.inp_.stop();
         stop(self.timer_);
+        clf;
         % return to main menu
         self.state_ = GameState.MAIN_MENU;
         % play sound of victory

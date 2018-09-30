@@ -44,18 +44,18 @@ classdef Graphics < handle
       self.potato_value_ = potato_slider.Value;
     end
     
-    function a=draw_level_select(self,level_button_callbacks)
+    function draw_level_select(self,level_list,load_level)
         %level_button_callbacks contains correct callback for each level
         titlebox = annotation('textbox',[.2 .8 .6 .1],'String','Level selection',...
             'FontSize',20,'HorizontalAlignment','center','FitBoxToText','on');
         j=1; %determines x-position of button
         k=0; %determines y-position of button
         i=1;
-        for levels = [1, 2, 3] %dummy, must be smth like GameEngine.levels
+        for level = level_list
             level_button{i} = uicontrol('Parent', self.fig_,...
             'String',num2str(i), 'Units', 'normalized',...
             'Position', [0.1*j 0.5-0.1*k 0.1 0.1]);
-            level_button(i).Callback = level_button_callbacks(i);
+            level_button(i).Callback = @(~,~)(load_level(level));
             i=i+1;
         if j==8
             j=1;
