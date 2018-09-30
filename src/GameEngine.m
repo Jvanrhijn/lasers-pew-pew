@@ -66,8 +66,7 @@ classdef GameEngine < handle
         self.timer_.Period = period;
     end
     
-    function start_potato_game(self)
-        period = 1/25; % 25 Hz refresh rate for less demanding performance
+    function start_potato_game(self,period)
         self.set_refresh_rate(period);
         self.start_game()
     end
@@ -118,7 +117,7 @@ classdef GameEngine < handle
           self.inp_.stop();
           clf;
           self.graphics_.draw_main_menu(@(~, ~)(self.start_game()),...
-                                        @(~, ~)(self.stop()),@(~,~)(self.start_potato_game()));
+                                        @(~, ~)(self.stop()), @(~,~)(self.start_potato_game(self.graphics_.get_potato_value())));
         otherwise
           return;
         end

@@ -4,6 +4,7 @@ classdef Graphics < handle
     fig_;
     xlims_ = [0, 1];
     ylims_ = [0, 1];
+    potato_value_;
   end
 
   methods
@@ -26,19 +27,26 @@ classdef Graphics < handle
     function draw_main_menu(self, start_button_callback, quit_callback, potato_callback)
       start_button = uicontrol('Parent', self.fig_,...
             'String', 'Start game (50 Hz)', 'Units', 'normalized',...
-            'Position', [0.5 0.5 0.2 0.1]);
+            'Position', [0.5 0.5 0.3 0.1]);
       start_button.Callback = start_button_callback;
       quit_button = uicontrol('Parent', self.fig_,...
             'String', 'Quit', 'Units', 'normalized',...
-            'Position', [0.5 0.4 0.2 0.1]);
+            'Position', [0.5 0.4 0.3 0.1]);
       quit_button.Callback = quit_callback;
+      potato_slider = uicontrol('Style', 'Slider', 'Min', 10, 'Max', 50, 'Value', 25,...
+          'Units', 'normalized', 'Position', [0.5 0.1 0.3 0.1]);
       potato_button = uicontrol('Parent', self.fig_,...
-            'String', 'Potato mode (25 Hz)', 'Units', 'normalized',...
-            'Position', [0.5 0.2 0.2 0.1]);
+            'String', ['Potato mode (10 to 50 Hz)'], 'Units', 'normalized',...
+            'Position', [0.5 0.2 0.3 0.1]);
       potato_button.Callback = potato_callback;
-      
+      self.potato_value_ = potato_slider.Value;
     end
-
+    
+    function pv = get_potato_value(self)
+        period = self.potato_value_;
+        pv = 1/period;        
+    end
+    
     function draw(self, obj)
       if isa(obj, 'Mirror')
         self.draw_mirror(obj);
