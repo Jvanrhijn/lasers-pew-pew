@@ -10,7 +10,6 @@ classdef Graphics < handle
 
     function self = Graphics()
       self.fig_ = figure;
-      hold on;
       self.set_range([0, 1, 0, 1]);
     end
 
@@ -98,8 +97,7 @@ classdef Graphics < handle
 
     function draw_shape(self, x, y, edge_color, fill_color)
       f = fill(x, y, fill_color);
-      p = plot(x, y, edge_color, 'LineWidth', 2);
-      self.set_range([self.xlims_, self.ylims_]);
+      p = line('Xdata', x, 'Ydata', y, 'Color', edge_color, 'LineWidth', 2);
     end
 
     function draw_ray_set(self, rays)
