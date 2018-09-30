@@ -25,7 +25,8 @@ classdef Graphics < handle
     end
 
     function draw_main_menu(self, start_button_callback, quit_callback, potato_callback)
-      titlebox = annotation('textbox',[.3 .8 .4 .1],'String','Lasers, pew pew!','FontSize',20);
+      titlebox = annotation('textbox',[.3 .8 .4 .1],'String','Lasers, pew pew!','FontSize',20,...
+          'HorizontalAlignment','center','FitBoxToText','on');
       start_button = uicontrol('Parent', self.fig_,...
             'String', 'Start game (50 Hz)', 'Units', 'normalized',...
             'Position', [0.5 0.5 0.3 0.1]);
@@ -41,6 +42,28 @@ classdef Graphics < handle
             'Position', [0.5 0.2 0.3 0.1]);
       potato_button.Callback = potato_callback;
       self.potato_value_ = potato_slider.Value;
+    end
+    
+    function a=draw_level_select(self,level_button_callbacks)
+        %level_button_callbacks contains correct callback for each level
+        titlebox = annotation('textbox',[.2 .8 .6 .1],'String','Level selection',...
+            'FontSize',20,'HorizontalAlignment','center','FitBoxToText','on');
+        j=1; %determines x-position of button
+        k=0; %determines y-position of button
+        i=1;
+        for levels = [1, 2, 3] %dummy, must be smth like GameEngine.levels
+            level_button{i} = uicontrol('Parent', self.fig_,...
+            'String',num2str(i), 'Units', 'normalized',...
+            'Position', [0.1*j 0.5-0.1*k 0.1 0.1]);
+            level_button(i).Callback = level_button_callbacks(i);
+            i=i+1;
+        if j==8
+            j=1;
+            k=k+1;
+        else
+            j=j+1;
+        end
+        end
     end
     
     function pv = get_potato_value(self)
