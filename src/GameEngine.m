@@ -21,12 +21,12 @@ classdef GameEngine < handle
       % setup game loop timer
       self.timer_ = timer();
       self.timer_.ExecutionMode = 'fixedSpacing';
-      % refresh rate = 30 Hz
+      % refresh rate = 50 Hz (default)
       self.timer_.Period = 1/50;
       % callback: drawing the state
       self.timer_.TimerFcn = @(x, y)(self.draw_state());
     end
-
+    
     function start(self)
       self.draw_state();
     end
@@ -60,6 +60,16 @@ classdef GameEngine < handle
       clf;
       self.inp_.start();
       start(self.timer_);
+    end
+    
+    function set_refresh_rate(self,period)
+        self.timer_.Period = period;
+    end
+    
+    function start_potato_game(self)
+        period = 1/25; % 25 Hz refresh rate for less demanding performance
+        self.set_refresh_rate(period);
+        self.start_game()
     end
 
     function stop(self)
@@ -108,7 +118,7 @@ classdef GameEngine < handle
           self.inp_.stop();
           clf;
           self.graphics_.draw_main_menu(@(~, ~)(self.start_game()),...
-                                        @(~, ~)(self.stop()));
+                                        @(~, ~)(self.stop()),@(~,~)(self.start_potato_game()));
         otherwise
           return;
         end
