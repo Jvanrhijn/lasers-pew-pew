@@ -25,6 +25,7 @@ classdef Graphics < handle
     end
 
     function draw_main_menu(self, start_button_callback, quit_callback, potato_callback)
+      titlebox = annotation('textbox',[.3 .8 .4 .1],'String','Lasers, pew pew!','FontSize',20);
       start_button = uicontrol('Parent', self.fig_,...
             'String', 'Start game (50 Hz)', 'Units', 'normalized',...
             'Position', [0.5 0.5 0.3 0.1]);
