@@ -6,6 +6,11 @@ classdef Circle < Shape
 
   methods
 
+    function c = copy(self)
+      c = Circle(self.location_);
+      c.set_dimensions(self.radius);
+    end
+
     function set_dimensions(self, dims)
       self.radius = dims(1);
     end
@@ -90,6 +95,16 @@ classdef Circle < Shape
     function in = inside(self, point)
       sep = self.location_ - point;
       in = sep.norm() <= self.radius;
+    end
+
+    function [ll, ur] = bounding_box(self)
+      ll = self.location_ - Vec(self.radius, self.radius); 
+      ur = self.location_ + Vec(self.radius, self.radius);
+    end
+
+    function [x, y] = coordinates(self, res)
+      x = 0:0.1:10;
+      y = 0:0.1:10;
     end
 
     function move_to(self, point)

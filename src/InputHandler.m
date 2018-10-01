@@ -50,7 +50,15 @@ classdef InputHandler < handle
       ax = self.game_state_.figure().CurrentAxes;
       cp = ax.CurrentPoint;
       p = Vec(cp(1, 1), cp(1, 2));
+      old_loc = self.selected_obj_.location();
       self.selected_obj_.move_to(p - offset);
+      for c = self.game_state_.components()
+        % if there is a collision after moving, move it back to the old location
+        if c{1}.shape.collides(self.selected_obj_.shape)
+          self.selected_obj_.move_to(old_loc);
+          return;
+        end
+      end
     end
 
     function wbucb(self, src, callbackdata)

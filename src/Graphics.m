@@ -122,9 +122,9 @@ classdef Graphics < handle
     end
 
     function [x, y] = rectangle_xy(self, rectangle)
-      p = rectangle.location();  
       [w, h] = rectangle.width_height(); 
       s = rectangle.slant();
+      p = rectangle.location();
       x = [-w/2, w/2, w/2, -w/2, -w/2];
       y = [-h/2, -h/2, h/2, h/2, -h/2];
       xrot = x*cos(s) - y*sin(s);
