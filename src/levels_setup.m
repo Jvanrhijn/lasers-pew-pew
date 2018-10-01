@@ -63,7 +63,7 @@ for n_object = level_data.n_object' %level_data.n_object is a column vector
             component_builder = @(x, y, dim1, dim2) MirrorFactory.build_circle(x, y, dim1);
             lvl = build_component(lvl, level_data, n_object, component_builder);
         case 'tm'
-            component_builder = @(x, y, dim1, dim2) MirrorFactory.build_triangle(x, y, [dim1, dim2, dim3, dim4]);
+            component_builder = @(x, y, dim1, dim2, dim3, dim4) MirrorFactory.build_triangle(x, y, [Vec(dim1, dim2), Vec(dim3, dim4)]);
             lvl = build_component(lvl, level_data, n_object, component_builder);
         case 'rl'
             component_builder = @(x, y, dim1, dim2) LensFactory.build_rectangle(x, y, [dim1, dim2]);
@@ -72,7 +72,7 @@ for n_object = level_data.n_object' %level_data.n_object is a column vector
             component_builder = @(x, y, dim1, dim2) LensFactory.build_circle(x, y, dim1);
             lvl = build_component(lvl, level_data, n_object, component_builder);
         case 'tl'
-            component_builder = @(x, y, dim1, dim2) LensFactory.build_triangle(x, y, [dim1, dim2, dim3, dim4]);
+            component_builder = @(x, y, dim1, dim2, dim3, dim4) LensFactory.build_triangle(x, y, [Vec(dim1, dim2), Vec(dim3, dim4)]);
             lvl = build_component(lvl, level_data, n_object, component_builder);
         case 'rb'
             component_builder = @(x, y, dim1, dim2) BlackBodyFactory.build_rectangle(x, y, [dim1, dim2]);
@@ -81,7 +81,7 @@ for n_object = level_data.n_object' %level_data.n_object is a column vector
             component_builder = @(x, y, dim1, dim2) BlackBodyFactory.build_circle(x, y, dim1);
             lvl = build_component(lvl, level_data, n_object, component_builder); 
         case 'tb'
-            component_builder = @(x, y, dim1, dim2) BlackBodyFactory.build_triangle(x, y, [dim1, dim2, dim3, dim4]);
+            component_builder = @(x, y, dim1, dim2, dim3, dim4) BlackBodyFactory.build_triangle(x, y, [Vec(dim1, dim2), Vec(dim3, dim4)]);
             lvl = build_component(lvl, level_data, n_object, component_builder);
         case 'rt'
             component_builder = @(x, y, dim1, dim2) TargetFactory.build_rectangle(x, y, [dim1, dim2]);
@@ -90,7 +90,7 @@ for n_object = level_data.n_object' %level_data.n_object is a column vector
             component_builder = @(x, y, dim1, dim2) TargetFactory.build_circle(x, y, dim1);
             lvl = build_component(lvl, level_data, n_object, component_builder);
         case 'tt'
-            component_builder = @(x, y, dim1, dim2) TargetFactory.build_triangle(x, y, [dim1, dim2, dim3, dim4]);
+            component_builder = @(x, y, dim1, dim2, dim3, dim4) TargetFactory.build_triangle(x, y, [Vec(dim1, dim2), Vec(dim3, dim4)]);
             lvl = build_component(lvl, level_data, n_object, component_builder);
     end
 end
