@@ -58,6 +58,7 @@ classdef Graphics < handle
                             'FontSize', 20, 'HorizontalAlignment', 'center',...
                             'FitBoxToText','on');
        level_button = {};
+       k = 0;
        for i = 1:level_list.length()
         level = level_list.get_node(i);
         level_button{i} = uicontrol('Parent', self.fig_,...

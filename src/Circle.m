@@ -7,7 +7,7 @@ classdef Circle < Shape
   methods
 
     function c = copy(self)
-      c = Circle(self.location_);
+      c = Circle(Vec(self.location_.x, self.location_.y));
       c.set_dimensions(self.radius);
     end
 

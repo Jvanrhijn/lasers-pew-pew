@@ -33,6 +33,7 @@ classdef InputHandler < handle
   methods(Access=protected)
 
     function wbdcb(self, src, callbackdata)
+      % callback for mouse button down
       ax = self.game_state_.figure().CurrentAxes;
       cp = ax.CurrentPoint;
       point = Vec(cp(1, 1), cp(1, 2));
@@ -47,21 +48,24 @@ classdef InputHandler < handle
     end
 
     function wbmcb(self, offset, src, callbackdata)
+      % callback for mouse movement
       ax = self.game_state_.figure().CurrentAxes;
       cp = ax.CurrentPoint;
       p = Vec(cp(1, 1), cp(1, 2));
-      old_loc = self.selected_obj_.location();
-      self.selected_obj_.move_to(p - offset);
+      obj_copy = self.selected_obj_.shape.copy();
+      obj_copy.move_to(p - offset);
       for c = self.game_state_.components()
-        % if there is a collision after moving, move it back to the old location
-        if c{1}.shape.collides(self.selected_obj_.shape)
-          self.selected_obj_.move_to(old_loc);
+        % if there is a collision after moving, 
+        % move it back to the old location. Ugly as all hell.
+        if c{1}.shape.collides(obj_copy) && c{1} ~= self.selected_obj_
           return;
         end
       end
+      self.selected_obj_.move_to(p - offset);
     end
 
     function wbucb(self, src, callbackdata)
+      % callback for mouse button up
       self.selected_obj_ = [];
       fig = gcf;
       ax = gca;
@@ -70,6 +74,7 @@ classdef InputHandler < handle
     end
 
     function wbswcb(self, src, callbackdata)
+      % callback for mouse scroll
       ax = self.game_state_.figure().CurrentAxes;
       cp = ax.CurrentPoint;
       p = Vec(cp(1, 1), cp(1, 2));
