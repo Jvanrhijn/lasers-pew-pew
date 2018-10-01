@@ -93,7 +93,7 @@ classdef Shape < handle
       v_diff = v1 - v2;
       angle = v_diff.angle_to_horizontal();
       slope = tan(angle);
-      offset = v1.y - slope*v1.x
+      offset = v1.y - slope*v1.x;
     end
         
   end
