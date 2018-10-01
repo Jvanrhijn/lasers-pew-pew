@@ -19,6 +19,21 @@ classdef Rectangle < Shape
       self.height_ = dims(2);
     end
 
+    function [x, y] = coordinates(self, res)
+      res = int32(res);
+      [w, h] = self.width_height(); 
+      s = self.slant();
+      p = self.location();
+      x = [linspace(-1, 1, res./4), ones(1, res./4),...
+           linspace(1, -1, res./4), -ones(1, res./4)]*w/2;
+      y = [-ones(1, res./4), linspace(-1, 1, res./4),...
+           ones(1, res./4), linspace(1, -1, res./4)]*h/2;
+      xrot = x*cos(s) - y*sin(s);
+      yrot = x*sin(s) + y*cos(s);
+      x = xrot + p.x;
+      y = yrot + p.y;
+    end
+
     function int = intersects(self, ray)
       [xt, xb, yl, yr] = self.intersect_sides(ray);
       ray_moved_start = ray.start() - self.location_;
