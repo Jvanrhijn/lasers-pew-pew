@@ -3,20 +3,23 @@ classdef GameEngine < handle
   properties(GetAccess=private, SetAccess=private)
     level_node_
     levels_
+    original_levels_
     graphics_
     max_reflections_ = 1000
     inp_
     state_
     timer_
+    directory_
   end 
 
   methods
     
     % constructor
-    function self = GameEngine()
+    function self = GameEngine(directory)
       self.graphics_ = Graphics();
       self.state_ = GameState.MAIN_MENU;
       self.inp_ = InputHandler(self);
+      self.directory_ = directory;
 
       % setup game loop timer
       self.timer_ = timer();
@@ -31,6 +34,11 @@ classdef GameEngine < handle
       self.draw_state();
     end
 
+    function load_levels_disc(self)
+        levels = levels_setup(self.directory_);
+        self.load_levels(levels);                
+    end
+    
     function load_levels(self, lvls)
       self.levels_ = LinkedList();
       for lvl = lvls
@@ -117,6 +125,9 @@ classdef GameEngine < handle
         case GameState.LEVEL_PLAY
           hold on;
           active_rays = self.trace_ray(); 
+          if self.state_ ~= GameState.LEVEL_PLAY
+              return
+          end
           for c = self.level_node_.value().components_
             self.graphics_.draw(c{1});
           end
@@ -124,8 +135,8 @@ classdef GameEngine < handle
           ax = gca;
           set(get(ax, 'Children'), 'HitTest', 'off', 'PickableParts', 'none');
         case GameState.MAIN_MENU
-          self.timer_.stop();
-          self.inp_.stop();
+%           self.timer_.stop();
+%           self.inp_.stop();
           clf;
           self.graphics_.draw_main_menu(@(~, ~)(self.start_selection()),...
                                         @(~, ~)(self.stop()),...
@@ -171,6 +182,11 @@ classdef GameEngine < handle
         self.inp_.stop();
         stop(self.timer_);
         clf;
+        close;
+        %reload levels
+        self.load_levels_disc();
+        %create new Graphics object
+        self.graphics_ = Graphics();
         % return to main menu
         self.state_ = GameState.MAIN_MENU;
         % play sound of victory

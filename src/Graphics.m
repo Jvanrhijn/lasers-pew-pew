@@ -22,9 +22,13 @@ classdef Graphics < handle
       dy = self.ylims_(2) - self.ylims_(1);
       dz = 1;
       pbaspect([dx, dy, dz]/max([dx, dy, dz]));
+      xticks(0:0.1:1);
+      yticks(0:0.1:1);
+      title('Drag and rotate objects to hit the target!')
     end
 
     function draw_main_menu(self, start_button_callback, quit_callback, potato_callback)
+      cla; clf;
       titlebox = annotation('textbox',[.3 .8 .4 .1],'String','Lasers, pew pew!','FontSize',20,...
           'HorizontalAlignment','center','FitBoxToText','on');
       start_button = uicontrol('Parent', self.fig_,...
@@ -42,6 +46,10 @@ classdef Graphics < handle
             'Position', [0.5 0.2 0.3 0.1]);
       potato_button.Callback = potato_callback;
       self.potato_value_ = potato_slider.Value;
+      instructionbox = annotation('textbox','Position',[.1 .3 .4 .3],'String',...
+          'Click and drag to move objects, scroll to rotate objects','FontSize',12,...
+          'HorizontalAlignment','center','VerticalAlignment','top',...
+          'FitBoxToText','off','Units','normalized','EdgeColor','none');
     end
     
     function draw_level_select(self,level_list,set_start_level)
