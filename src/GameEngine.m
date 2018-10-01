@@ -39,8 +39,8 @@ classdef GameEngine < handle
       self.level_node_ = self.levels_.get_node(1);
     end
 
-    function set_level(self, level)
-      self.level_node_ = level;
+    function set_level(self, level_node)
+      self.level_node_ = level_node;
     end
     
     function set_start_level(self, level)
@@ -77,7 +77,7 @@ classdef GameEngine < handle
         self.timer_.Period = period;
     end
     
-    function start_potato_game(self,period)
+    function start_potato_selection(self,period)
         self.set_refresh_rate(period);
         self.start_selection()
     end
@@ -129,7 +129,7 @@ classdef GameEngine < handle
           clf;
           self.graphics_.draw_main_menu(@(~, ~)(self.start_selection()),...
                                         @(~, ~)(self.stop()),...
-                                        @(~,~)(self.start_potato_game(self.graphics_.get_potato_value())));
+                                        @(~,~)(self.start_potato_selection(self.graphics_.get_potato_value())));
         case GameState.LEVEL_SELECT
           self.timer_.stop();
           self.inp_.stop();
