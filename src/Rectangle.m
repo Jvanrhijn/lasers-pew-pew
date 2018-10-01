@@ -32,6 +32,8 @@ classdef Rectangle < Shape
     end
 
     function [point, normal] = intersection_point(self, ray)
+      point = Vec([], []);
+      normal = Vec([], []); % stub
       if self.intersects(ray)
         ray_moved_start = ray.start() - self.location_;
         ray_moved = Ray(ray_moved_start.rotate(-self.slant_), ray.angle() - self.slant_);
@@ -77,9 +79,6 @@ classdef Rectangle < Shape
             end
           end
         end
-      else
-        point = Vec([], []);
-        normal = Vec([], []); % stub
       end
     end
 

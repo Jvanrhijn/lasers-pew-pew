@@ -7,7 +7,7 @@ classdef Mirror < Component
     end
 
     function new_ray = interact_with(self, ray)
-      [point, normal] = self.shape.intersection_point(ray);
+      [point, normal] = self.intersection_point(ray);
       % since this is a mirror, normal.dot(ray.direction) < 0
       % the incident angle is then
       angle_incident = pi - normal.angle(ray.direction());
@@ -22,7 +22,7 @@ classdef Mirror < Component
       ray_vec_refl.rotate(slant);
       % to avoid intersecting the same surface again, move point
       % outward slightly
-      f = eps*1;
+      f = eps*10;
       new_ray = Ray(point - Vec(normal.x*f, normal.y*f),...
                     ray_vec_refl.angle_to_horizontal());
     end
