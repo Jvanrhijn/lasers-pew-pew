@@ -54,7 +54,7 @@ classdef Rectangle < Shape
 
     function [point, normal] = intersection_point(self, ray)
       point = Vec([], []);
-      normal = Vec([], []); % stub
+      normal = Vec([], []); 
       if self.intersects(ray)
         ray_moved_start = ray.start() - self.location_;
         ray_moved = Ray(ray_moved_start.rotate(-self.slant_), ray.angle() - self.slant_);
