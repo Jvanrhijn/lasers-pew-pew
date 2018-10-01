@@ -210,6 +210,14 @@ classdef Triangle < Shape
       self.vertex_three_ = self.location_ + vec_barythree_rotate;
       
     end
+    
+    function [ll, ur] = bounding_box(self)
+      vertices = [self.vertex_one_, self.vertex_two_, self.vertex_three_];
+      xs = map(vertices, @(x)(x.x));
+      ys = map(vertices, @(y)(y.y));
+      ll = Vec(min(xs), min(ys));
+      ur = Vec(max(xs), max(ys));
+    end
             
   end
   
