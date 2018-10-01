@@ -31,6 +31,7 @@ classdef GameEngine < handle
     end
     
     function start(self)
+      self.load_levels_disc();
       self.draw_state();
     end
 
@@ -146,6 +147,27 @@ classdef GameEngine < handle
           self.inp_.stop();
           clf;
           self.graphics_.draw_level_select(self.levels_, @self.set_start_level)
+        case GameState.VICTORY
+        % stop input handler and timer
+        self.inp_.stop();
+        stop(self.timer_);
+        clf;
+        titlebox = annotation('textbox',[.3 .8 .4 .1],'String','Congratulations, you finished the game!','FontSize',20,...
+          'HorizontalAlignment','center','FitBoxToText','on');
+        % play sound of victory
+        % TODO fix this on Linux
+%         sound_of_victory = load('gong');
+%         sound(sound_of_victory.y,sound_of_victory.Fs)
+        pause(5);
+        close all;
+        %reload levels
+        self.load_levels_disc();
+        %create new Graphics object
+        self.graphics_ = Graphics();
+        self.state_ = GameState.MAIN_MENU;
+        % reset level to level 1
+        self.level_node_ = self.levels_.get_node(1);
+        self.draw_state();
         otherwise
           return;
         end
@@ -177,25 +199,11 @@ classdef GameEngine < handle
     function next_level(self)
       self.level_node_ = self.level_node_.next();
       if isempty(self.level_node_)
-        title('Congratulations, you finished the game!');
-        % stop input handler and timer
-        self.inp_.stop();
-        stop(self.timer_);
-        clf;
-        close;
-        %reload levels
-        self.load_levels_disc();
-        %create new Graphics object
-        self.graphics_ = Graphics();
-        % return to main menu
-        self.state_ = GameState.MAIN_MENU;
-        % play sound of victory
-        % TODO fix this on Linux
-        %sound_of_victory = load('gong');
-        %sound(sound_of_victory.y,sound_of_victory.Fs)
-        % reset level to level 1
-        self.level_node_ = self.levels_.get_node(1);
-        % draw menu
+        % to victory screen
+        self.state_ = GameState.VICTORY;
+        
+        
+        % draw screen
         self.draw_state();
       end
     end
