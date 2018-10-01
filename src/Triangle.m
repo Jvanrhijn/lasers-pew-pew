@@ -12,33 +12,83 @@ classdef Triangle < Shape
       self.vertex_one_ = dims(1);
       self.vertex_two_ = dims(2);
       self.vertex_three_ = self.third_vertex(self.vertex_one_, self.vertex_two_, self.location_);
-      disp(self.vertex_three_)
+      % disp(self.vertex_three_)
       
     end
     
     function int = intersects(self, ray)
     % tests if there is an intersection on any side of the triangle
     
-    % sorts the points of the triangle counter clockwise
-    point_sorted = counter_clockwise_sort(self, [self.vertex_one_,...
-                                          self.vertex_two_,...
-                                          self.vertex_three_]);
+    % if ray starts inside triangle there must be an intersection
+    if self.inside(ray.start())
+      int = true;
+      
+    else
+      % sorted points
+      point_sorted = self.counter_clockwise_sort([self.vertex_one_, self.vertex_two_, self.vertex_three_]);
+      point_one = point_sorted(1);
+      point_two = point_sorted(2);
+      point_three = point_sorted(3);
 
-    % normal vectors of sides
-    normal = norm(self);
-    norm1 = normal(1);
-    norm2 = normal(2);
-    norm3 = normal(3);
-    
-    % direction of the ray
-    direction_ray = direction(ray);
-    
-    int = (self.intersects_side(point_sorted(2), point_sorted(1), ray)...
-        &&  norm1.dot(direction_ray) < 0)...
-        || (self.intersects_side(point_sorted(3), point_sorted(2), ray)...
-        && norm2.dot(direction_ray) < 0)...
-        || (self.intersects_side(point_sorted(1), point_sorted(3), ray)...
-        && norm3.dot(direction_ray) < 0);
+      % sorted vectors of sides
+      vec_cc = self.counter_clockwise_vectors();
+
+      % rotate sides so side lies on x axis
+
+      % side 1
+      vec_one_cc = -vec_cc(1);
+      % angle to rotate the side around point 2 in such a manner that both points have same
+      % x coordinate
+      angle_one = -pi/2 - vec_one_cc.angle_to_horizontal();
+      % rotate start of ray
+      ray_point_one = ray.start() - point_two;
+      rotated_ray_point_one = ray_point_one.rotate(angle_one);
+      ray_start_one = point_two + rotated_ray_point_one;
+      % rotate angle of ray
+      ray_angle_one = ray.angle() + angle_one;
+      ray_one = Ray(ray_start_one, ray_angle_one);
+      dir_ray_one = ray_one.direction();
+
+      % side 2
+      vec_two_cc = -vec_cc(2);
+      % angle to rotate the side around point 3 in such a manner that both points have same
+      % x coordinate
+      angle_two = -pi/2 - vec_two_cc.angle_to_horizontal();
+      % rotate start of ray
+      ray_point_two = ray.start() - point_three;
+      rotated_ray_point_two = ray_point_two.rotate(angle_two);
+      ray_start_two = point_three + rotated_ray_point_two;
+      % rotate angle of ray
+      ray_angle_two = ray.angle() + angle_two;
+      ray_two = Ray(ray_start_two, ray_angle_two);
+      dir_ray_two = ray_two.direction();
+
+      % side 3
+      vec_three_cc = -vec_cc(3);
+      % angle to rotate the side around point 1 in such a manner that both points have same
+      % x coordinate
+      angle_three = -pi/2 - vec_three_cc.angle_to_horizontal();
+      % rotate start of ray
+      ray_point_three = ray.start() - point_one;
+      rotated_ray_point_three = ray_point_three.rotate(angle_three);
+      ray_start_three = point_one + rotated_ray_point_three;
+      % rotate angle of ray
+      ray_angle_three = ray.angle() + angle_three;
+      ray_three = Ray(ray_start_three, ray_angle_three);
+      dir_ray_three = ray_three.direction();
+
+      int = ((self.intersects_side(point_two, point_one, ray))...
+          && ((ray_start_one.x < point_two.x) || (dir_ray_one.x < 0))...
+          && ((ray_start_one.x > point_two.x) || (dir_ray_one.x > 0)))...
+          ...
+          || ((self.intersects_side(point_three, point_two, ray))...
+          && ((ray_start_two.x < point_three.x) || (dir_ray_two.x < 0))...
+          && ((ray_start_two.x > point_three.x) || (dir_ray_two.x > 0)))...
+          ...         
+          || ((self.intersects_side(point_one, point_three, ray))...
+          && ((ray_start_three.x < point_one.x) || (dir_ray_three.x < 0))...
+          && ((ray_start_three.x > point_one.x) || (dir_ray_three.x > 0)));
+    end
       
     end
     
