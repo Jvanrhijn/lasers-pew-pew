@@ -16,7 +16,7 @@ classdef Triangle < Shape
       
     end
     
-    function int = intersects(self, ray)
+    function int = self.intersects(ray)
     % tests if there is an intersection on any side of the triangle
     
     % if ray starts inside triangle there must be an intersection
@@ -92,7 +92,7 @@ classdef Triangle < Shape
       
     end
     
-    function [point, normal] = intersection_point(self, ray)
+    function [point, normal] = self.intersection_point(ray)
       % finds the point of intersection between the ray and the side of the triangle and it's normal
       % to this side
       
@@ -107,15 +107,15 @@ classdef Triangle < Shape
         [ray_slope, ray_offset] = ray.line();
         
         % sorts the points of the triangle counter clockwise
-        point_sorted = counter_clockwise_sort(self, [self.vertex_one_,...
+        point_sorted = self.counter_clockwise_sort([self.vertex_one_,...
                                                      self.vertex_two_,...
                                                      self.vertex_three_]);
         
         % the counter-clockwise sides of the triangle
-        vec_cc =  counter_clockwise_vectors(self);
+        vec_cc =  self.counter_clockwise_vectors();
         
         % the normal vectors of these sides
-        normal = norm(self);
+        normal = self.norm();
         
         % intersection on side one
         % check wether intersection is on side of triangle
@@ -262,7 +262,7 @@ classdef Triangle < Shape
       end 
     end
     
-    function v3 = third_vertex(self, v1, v2, location)
+    function v3 = self.third_vertex(v1, v2, location)
       % determines the third vertex of a triangle based on the first two
       % verticed and the location of it's center of mass
       x_comp = 3*location.x - v1.x - v2.x;
@@ -312,7 +312,7 @@ classdef Triangle < Shape
       % [side_one, side_two, side_three]
       
       % sorts the points of the triangle counter clockwise
-      point_sorted = counter_clockwise_sort(self, [self.vertex_one_,...
+      point_sorted = self.counter_clockwise_sort([self.vertex_one_,...
                                             self.vertex_two_,...
                                             self.vertex_three_]);
       % sides described by counter-clockwise vector
