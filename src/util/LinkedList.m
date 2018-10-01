@@ -1,16 +1,19 @@
 classdef LinkedList < handle
 
   properties
-    start_ 
+    start_
+    length_
   end
 
   methods
     
     function self = LinkedList()
       self.start_ = [];
+      self.length_ = 0;
     end
 
     function self = append(self, value)
+      self.length_ = self.length_+1;
       if isempty(self.start_)
         self.start_ = Node(value, []);
       else
@@ -37,6 +40,15 @@ classdef LinkedList < handle
         end
       end
     end
+    
+%     function node = subsindex(self, idx)
+%         node = self.get_node(idx);
+%     end
+    
+    function val = length(self)
+        val = self.length_;
+    end
+        
 
   end
 
