@@ -54,6 +54,9 @@ classdef Shape < handle
     % rotate the shape counter-clockwise about its centroidal axis
     rotate(self, angle)
 
+    % return x, y coordinate arrays for the shape with resolution res
+    coordinates(self, res)
+
     % return the lower-left and upper-right corners of the bounding
     % box of this shape
     bounding_box(self)

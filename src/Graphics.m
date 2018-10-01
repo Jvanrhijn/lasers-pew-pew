@@ -1,6 +1,6 @@
 classdef Graphics < handle
 
-  properties(SetAccess = private, GetAccess = private)
+  properties(SetAccess=private, GetAccess=private)
     fig_;
     xlims_ = [0, 1];
     ylims_ = [0, 1];
@@ -46,10 +46,11 @@ classdef Graphics < handle
             'Position', [0.5 0.2 0.3 0.1]);
       potato_button.Callback = potato_callback;
       self.potato_value_ = potato_slider.Value;
-      instructionbox = annotation('textbox','Position',[.1 .3 .4 .3],'String',...
-          'Click and drag to move objects, scroll to rotate objects','FontSize',12,...
-          'HorizontalAlignment','center','VerticalAlignment','top',...
-          'FitBoxToText','off','Units','normalized','EdgeColor','none');
+      instructionbox = annotation('textbox', 'Position', [.1 .3 .4 .3],...
+            'String', 'Click and drag to move objects, scroll to rotate objects',...
+            'FontSize', 12, 'HorizontalAlignment', 'center',...
+            'VerticalAlignment', 'top', 
+            'FitBoxToText', 'off', 'Units', 'normalized', 'EdgeColor', 'none');
     end
     
     function draw_level_select(self,level_list,set_start_level)
@@ -62,8 +63,8 @@ classdef Graphics < handle
        for i = 1:level_list.length()
         level = level_list.get_node(i);
         level_button{i} = uicontrol('Parent', self.fig_,...
-        'String',num2str(i), 'Units', 'normalized',...
-        'Position', [0.1*mod(i, 8), 0.5-0.1*k, 0.1, 0.1]);
+            'String', num2str(i), 'Units', 'normalized',...
+            'Position', [0.1*mod(i, 8), 0.5-0.1*k, 0.1, 0.1]);
         level_button{i}.Callback = @(~, ~)(set_start_level(level));
         if mod(i, 8) == 0
           k= k + 1;
@@ -93,53 +94,28 @@ classdef Graphics < handle
     end
 
     function draw_target(self, target)
-      if isa(target.shape, 'Circle')
-        [x, y] = self.circle_xy(target.shape);
-      elseif isa(target.shape, 'Rectangle')
-        [x, y] = self.rectangle_xy(target.shape);
-      else
-        error('Shape drawing not implemented for Target');
-      end
-      self.draw_shape(x, y, 'red', 'red'); 
+      [x, y] = target.shape.coordinates(50);
+      self.draw_shape(x, y, 'red', 'red');
     end
 
     function draw_blackbody(self, blackbody)
-      if isa(blackbody.shape, 'Circle')
-        [x, y] = self.circle_xy(blackbody.shape);
-      elseif isa(blackbody.shape, 'Rectangle')
-        [x, y] = self.rectangle_xy(blackbody.shape);
-      else
-        error('Shape drawing not implemented for BlackBody');
-      end
+      [x, y] = blackbody.shape.coordinates(50);
       self.draw_shape(x, y, 'black', [0, 0, 0]);
     end
 
     function draw_mirror(self, mirror)
-      if isa(mirror.shape, 'Circle')
-        [x, y] = self.circle_xy(mirror.shape);
-      elseif isa(mirror.shape, 'Rectangle')
-        [x, y] = self.rectangle_xy(mirror.shape);
-      else
-        error('Shape drawing not implemented');
-      end
-        self.draw_shape(x, y, 'cyan', [0.5, 0.5, 0.5]);
+      [x, y] = mirror.shape.coordinates(50);
+      self.draw_shape(x, y, 'cyan', [0.5, 0.5, 0.5]);
     end
 
     function draw_lens(self, lens)
-      if isa(lens.shape, 'Circle')
-        [x, y] = self.circle_xy(lens.shape);
-        self.draw_shape(x, y, 'cyan', 'cyan');
-      elseif isa(lens.shape, 'Rectangle')
-        [x, y] = self.rectangle_xy(lens.shape);
-        self.draw_shape(x, y, 'cyan', 'cyan');
-      else
-        error('Shape drawing not implemented');
-      end
+      [x, y] = lens.shape.coordinates(50);
+      self.draw_shape(x, y, 'cyan', 'cyan');
     end
 
     function draw_shape(self, x, y, edge_color, fill_color)
-      f = fill(x, y, fill_color);
-      p = line('Xdata', x, 'Ydata', y, 'Color', edge_color, 'LineWidth', 2);
+      fill(x, y, fill_color);
+      line('Xdata', x, 'Ydata', y, 'Color', edge_color, 'LineWidth', 2);
     end
 
     function draw_ray_set(self, rays)
@@ -153,26 +129,6 @@ classdef Graphics < handle
       plot(xs, ys, 'r', 'LineWidth', 2);
       self.draw_ray(rays(end));
       self.set_range([self.xlims_, self.ylims_]);
-    end
-
-    function [x, y] = circle_xy(self, circle)
-      r = circle.radius;
-      p = circle.location();
-      theta = linspace(0, 2*pi, 100);
-      x = r*cos(theta) + p.x;
-      y = r*sin(theta) + p.y;
-    end
-
-    function [x, y] = rectangle_xy(self, rectangle)
-      [w, h] = rectangle.width_height(); 
-      s = rectangle.slant();
-      p = rectangle.location();
-      x = [-w/2, w/2, w/2, -w/2, -w/2];
-      y = [-h/2, -h/2, h/2, h/2, -h/2];
-      xrot = x*cos(s) - y*sin(s);
-      yrot = x*sin(s) + y*cos(s);
-      x = xrot + p.x;
-      y = yrot + p.y;
     end
 
     function draw_ray(self, ray)

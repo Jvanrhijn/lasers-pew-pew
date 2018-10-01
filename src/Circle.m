@@ -15,6 +15,12 @@ classdef Circle < Shape
       self.radius = dims(1);
     end
 
+    function [x, y] = coordinates(self, res)
+      theta = linspace(0, 2*pi, 100);
+      x = self.radius*cos(theta) + self.location_.x;
+      y = self.radius*sin(theta) + self.location_.y;
+    end
+
     function on = intersects(self, ray)
       difference_vec = self.location_ - ray.start();
       distance = difference_vec.norm();
@@ -100,11 +106,6 @@ classdef Circle < Shape
     function [ll, ur] = bounding_box(self)
       ll = self.location_ - Vec(self.radius, self.radius); 
       ur = self.location_ + Vec(self.radius, self.radius);
-    end
-
-    function [x, y] = coordinates(self, res)
-      x = 0:0.1:10;
-      y = 0:0.1:10;
     end
 
     function move_to(self, point)
