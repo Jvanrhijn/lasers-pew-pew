@@ -3,34 +3,43 @@ classdef GameEngine < handle
   properties(GetAccess=private, SetAccess=private)
     level_node_
     levels_
+    original_levels_
     graphics_
     max_reflections_ = 1000
     inp_
     state_
     timer_
+    directory_
   end 
 
   methods
     
     % constructor
-    function self = GameEngine()
+    function self = GameEngine(directory)
       self.graphics_ = Graphics();
       self.state_ = GameState.MAIN_MENU;
       self.inp_ = InputHandler(self);
+      self.directory_ = directory;
 
       % setup game loop timer
       self.timer_ = timer();
       self.timer_.ExecutionMode = 'fixedSpacing';
-      % refresh rate = 30 Hz
+      % refresh rate = 50 Hz (default)
       self.timer_.Period = 1/50;
       % callback: drawing the state
       self.timer_.TimerFcn = @(x, y)(self.draw_state());
     end
-
+    
     function start(self)
+      self.load_levels_disc();
       self.draw_state();
     end
 
+    function load_levels_disc(self)
+        levels = levels_setup(self.directory_);
+        self.load_levels(levels);                
+    end
+    
     function load_levels(self, lvls)
       self.levels_ = LinkedList();
       for lvl = lvls
@@ -39,8 +48,13 @@ classdef GameEngine < handle
       self.level_node_ = self.levels_.get_node(1);
     end
 
-    function set_level(self, level)
-      self.level_node_ = level;
+    function set_level(self, level_node)
+      self.level_node_ = level_node;
+    end
+    
+    function set_start_level(self, level)
+        self.set_level(level);
+        self.start_game();
     end
 
     function comp = components(self)
@@ -60,6 +74,21 @@ classdef GameEngine < handle
       clf;
       self.inp_.start();
       start(self.timer_);
+    end
+    
+    function start_selection(self)
+      self.state_ = GameState.LEVEL_SELECT;
+      clf;
+      self.draw_state();
+    end
+    
+    function set_refresh_rate(self,period)
+        self.timer_.Period = period;
+    end
+    
+    function start_potato_selection(self,period)
+        self.set_refresh_rate(period);
+        self.start_selection()
     end
 
     function stop(self)
@@ -97,6 +126,9 @@ classdef GameEngine < handle
         case GameState.LEVEL_PLAY
           hold on;
           active_rays = self.trace_ray(); 
+          if self.state_ ~= GameState.LEVEL_PLAY
+              return
+          end
           for c = self.level_node_.value().components_
             self.graphics_.draw(c{1});
           end
@@ -104,11 +136,38 @@ classdef GameEngine < handle
           ax = gca;
           set(get(ax, 'Children'), 'HitTest', 'off', 'PickableParts', 'none');
         case GameState.MAIN_MENU
+%           self.timer_.stop();
+%           self.inp_.stop();
+          clf;
+          self.graphics_.draw_main_menu(@(~, ~)(self.start_selection()),...
+                                        @(~, ~)(self.stop()),...
+                                        @(~,~)(self.start_potato_selection(self.graphics_.get_potato_value())));
+        case GameState.LEVEL_SELECT
           self.timer_.stop();
           self.inp_.stop();
           clf;
-          self.graphics_.draw_main_menu(@(~, ~)(self.start_game()),...
-                                        @(~, ~)(self.stop()));
+          self.graphics_.draw_level_select(self.levels_, @self.set_start_level)
+        case GameState.VICTORY
+        % stop input handler and timer
+        self.inp_.stop();
+        stop(self.timer_);
+        clf;
+        titlebox = annotation('textbox',[.3 .8 .4 .1],'String','Congratulations, you finished the game!','FontSize',20,...
+          'HorizontalAlignment','center','FitBoxToText','on');
+        % play sound of victory
+        % TODO fix this on Linux
+%         sound_of_victory = load('gong');
+%         sound(sound_of_victory.y,sound_of_victory.Fs)
+        pause(5);
+        close all;
+        %reload levels
+        self.load_levels_disc();
+        %create new Graphics object
+        self.graphics_ = Graphics();
+        self.state_ = GameState.MAIN_MENU;
+        % reset level to level 1
+        self.level_node_ = self.levels_.get_node(1);
+        self.draw_state();
         otherwise
           return;
         end
@@ -140,19 +199,11 @@ classdef GameEngine < handle
     function next_level(self)
       self.level_node_ = self.level_node_.next();
       if isempty(self.level_node_)
-        title('Congratulations, you finished the game!');
-        % stop input handler and timer
-        self.inp_.stop();
-        stop(self.timer_);
-        % return to main menu
-        self.state_ = GameState.MAIN_MENU;
-        % play sound of victory
-        % TODO fix this on Linux
-        %sound_of_victory = load('gong');
-        %sound(sound_of_victory.y,sound_of_victory.Fs)
-        % reset level to level 1
-        self.level_node_ = self.levels_.get_node(1);
-        % draw menu
+        % to victory screen
+        self.state_ = GameState.VICTORY;
+        
+        
+        % draw screen
         self.draw_state();
       end
     end
