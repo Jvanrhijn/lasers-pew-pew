@@ -53,26 +53,21 @@ classdef Graphics < handle
     end
     
     function draw_level_select(self,level_list,set_start_level)
-        titlebox = annotation('textbox',[.2 .8 .6 .1],'String','Level selection',...
-            'FontSize',20,'HorizontalAlignment','center','FitBoxToText','on');
-        j=1; %determines x-position of button
-        k=0; %determines y-position of button
-        i=1;
-        level_button = {};
-        for i = 1:level_list.length()
-            level = level_list.get_node(i);
-            level_button{i} = uicontrol('Parent', self.fig_,...
-            'String',num2str(i), 'Units', 'normalized',...
-            'Position', [0.1*j 0.5-0.1*k 0.1 0.1]);
-            level_button{i}.Callback = @(~,~)(set_start_level(level));
-            i=i+1;
-        if j==8
-            j=1;
-            k=k+1;
-        else
-            j=j+1;
+      titlebox = annotation('textbox', [.2, .8, .6, .1],...
+                            'String', 'Level selection',...
+                            'FontSize', 20, 'HorizontalAlignment', 'center',...
+                            'FitBoxToText','on');
+       level_button = {};
+       for i = 1:level_list.length()
+        level = level_list.get_node(i);
+        level_button{i} = uicontrol('Parent', self.fig_,...
+        'String',num2str(i), 'Units', 'normalized',...
+        'Position', [0.1*mod(i, 8), 0.5-0.1*k, 0.1, 0.1]);
+        level_button{i}.Callback = @(~, ~)(set_start_level(level));
+        if mod(i, 8) == 0
+          k= k + 1;
         end
-        end
+      end
     end
     
     function pv = get_potato_value(self)
