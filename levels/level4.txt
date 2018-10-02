@@ -1,6 +1,8 @@
-n_obj	type	xloc	yloc	dim1	dim2	dim3	dim4
-1	sr	0	0	0.1	none	none	none
-2	rt	0.5	0.5	0.1	0.1	none	none
-3	cl	0.4	0.3	0.2	none	none	none
-4	cm	0.9	0.9	0.3	none	none	none
+n_obj	type 	xloc	yloc	dim1	dim2	dim3	dim4
+1	sr	0	0.5	2e-16	none	none	none
+2	rt	0.99	0.5	0.1	0.1	none	none
+3	cl	0.25	0.5	0.05	none	none	none
+4	cl	0.75	0.5	0.05	none	none	none
+5	rm	0.9	0.2	0.02	0.1	none	none
+6	rb	0.5	0.6	0.05	0.8	none	none
 

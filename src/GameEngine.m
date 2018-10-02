@@ -150,9 +150,14 @@ classdef GameEngine < handle
         % stop input handler and timer
         self.inp_.stop();
         stop(self.timer_);
-        clf;
-        titlebox = annotation('textbox',[.3 .8 .4 .1],'String','Congratulations, you finished the game!','FontSize',20,...
-          'HorizontalAlignment','center','FitBoxToText','on');
+        close all
+        figure
+        annotation('textbox',[.3 .5 .4 .1],'String','Congratulations, you finished the game!','FontSize',20,...
+          'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
+        annotation('textbox',[.3 .4 .4 .1],'String','Good for you.','FontSize',15,...
+          'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
+        annotation('textbox',[.3 .2 .4 .1],'String','Returning to main menu in a bit...','FontSize',15,...
+          'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
         % play sound of victory
         % TODO fix this on Linux
 %         sound_of_victory = load('gong');
