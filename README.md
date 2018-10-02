@@ -24,4 +24,7 @@ Call the `main` script from the MATlab command window:
 >>> main
 ```
 
+If the game does not perform well (e.g. freezes regularly, doesn't capture input), lower the
+refresh rate using the slider in the main menu.
+
 Quit the game by pressing any key during gameplay.

@@ -89,13 +89,13 @@ classdef GameEngine < handle
       self.draw_state();
     end
     
-    function set_refresh_rate(self,period)
+    function set_refresh_rate(self, period)
         self.timer_.Period = period;
     end
     
-    function start_level_selection(self,period)
+    function start_level_selection(self, period)
         self.set_refresh_rate(period);
-        self.start_selection()
+        self.start_selection();
     end
 
     function active_rays = trace_ray(self)
@@ -147,31 +147,31 @@ classdef GameEngine < handle
           clf;
           self.graphics_.draw_level_select(self.levels_, @self.set_start_level)
         case GameState.VICTORY
-        % stop input handler and timer
-        self.inp_.stop();
-        stop(self.timer_);
-        close all
-        figure
-        annotation('textbox',[.3 .5 .4 .1],'String','Congratulations, you finished the game!','FontSize',20,...
-          'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
-        annotation('textbox',[.3 .4 .4 .1],'String','Good for you.','FontSize',15,...
-          'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
-        annotation('textbox',[.3 .2 .4 .1],'String','Returning to main menu in a bit...','FontSize',15,...
-          'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
-        % play sound of victory
-        % TODO fix this on Linux
-%         sound_of_victory = load('gong');
-%         sound(sound_of_victory.y,sound_of_victory.Fs)
-        pause(5);
-        close all;
-        %reload levels
-        self.load_levels_disc();
-        %create new Graphics object
-        self.graphics_ = Graphics();
-        self.state_ = GameState.MAIN_MENU;
-        % reset level to level 1
-        self.level_node_ = self.levels_.get_node(1);
-        self.draw_state();
+          % stop input handler and timer
+          self.inp_.stop();
+          stop(self.timer_);
+          close all
+          figure
+          annotation('textbox',[.3 .5 .4 .1],'String','Congratulations, you finished the game!','FontSize',20,...
+            'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
+          annotation('textbox',[.3 .4 .4 .1],'String','Good for you.','FontSize',15,...
+            'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
+          annotation('textbox',[.3 .2 .4 .1],'String','Returning to main menu in a bit...','FontSize',15,...
+            'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
+          % play sound of victory
+          % TODO fix this on Linux
+%           sound_of_victory = load('gong');
+%           sound(sound_of_victory.y,sound_of_victory.Fs)
+          pause(5);
+          close all;
+          %reload levels
+          self.load_levels_disc();
+          %create new Graphics object
+          self.graphics_ = Graphics();
+          self.state_ = GameState.MAIN_MENU;
+          % reset level to level 1
+          self.level_node_ = self.levels_.get_node(1);
+          self.draw_state();
         otherwise
           return;
         end

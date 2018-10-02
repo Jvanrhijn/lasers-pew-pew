@@ -5,6 +5,7 @@ classdef Graphics < handle
     xlims_ = [0, 1];
     ylims_ = [0, 1];
     refresh_value_;
+    slider_ = [];
   end
 
   methods
@@ -35,13 +36,13 @@ classdef Graphics < handle
             'String', 'Quit', 'Units', 'normalized',...
             'Position', [0.5 0.3 0.3 0.1]);
       quit_button.Callback = quit_callback;
-      start_slider = uicontrol('Style', 'Slider', 'Min', 10, 'Max', 50, 'Value', 50,...
+      self.slider_ = uicontrol('Style', 'Slider', 'Min', 10, 'Max', 50, 'Value', 50,...
           'Units', 'normalized', 'Position', [0.5 0.4 0.3 0.1]);
       start_button = uicontrol('Parent', self.fig_,...
             'String', ['Start game (10 to 50 Hz)'], 'Units', 'normalized',...
             'Position', [0.5 0.5 0.3 0.1]);
       start_button.Callback = start_callback;
-      self.refresh_value_ = start_slider.Value;
+      self.refresh_value_ = self.slider_.Value;
       instructionbox = annotation('textbox', 'Position', [.1 .3 .4 .3],...
             'String', 'Click and drag to move objects, scroll to rotate objects',...
             'FontSize', 12, 'HorizontalAlignment', 'center',...
@@ -69,7 +70,7 @@ classdef Graphics < handle
     end
     
     function pv = get_refresh_value(self)
-        period = self.refresh_value_;
+        period = self.slider_.Value;
         pv = 1/period;        
     end
     
