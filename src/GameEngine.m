@@ -34,7 +34,14 @@ classdef GameEngine < handle
       self.load_levels_disc();
       self.draw_state();
     end
-
+    
+    function stop(self)
+      stop(self.timer_);
+      self.inp_.stop();
+      clear all;
+      close all;
+    end
+    
     function load_levels_disc(self)
         levels = levels_setup(self.directory_);
         self.load_levels(levels);                
@@ -86,14 +93,9 @@ classdef GameEngine < handle
         self.timer_.Period = period;
     end
     
-    function start_potato_selection(self,period)
+    function start_level_selection(self,period)
         self.set_refresh_rate(period);
         self.start_selection()
-    end
-
-    function stop(self)
-      clear all;
-      close all;
     end
 
     function active_rays = trace_ray(self)
@@ -136,12 +138,9 @@ classdef GameEngine < handle
           ax = gca;
           set(get(ax, 'Children'), 'HitTest', 'off', 'PickableParts', 'none');
         case GameState.MAIN_MENU
-%           self.timer_.stop();
-%           self.inp_.stop();
           clf;
-          self.graphics_.draw_main_menu(@(~, ~)(self.start_selection()),...
-                                        @(~, ~)(self.stop()),...
-                                        @(~,~)(self.start_potato_selection(self.graphics_.get_potato_value())));
+          self.graphics_.draw_main_menu(@(~,~)(self.start_level_selection(self.graphics_.get_refresh_value())),...
+                                        @(~, ~)(self.stop()));
         case GameState.LEVEL_SELECT
           self.timer_.stop();
           self.inp_.stop();
@@ -151,9 +150,14 @@ classdef GameEngine < handle
         % stop input handler and timer
         self.inp_.stop();
         stop(self.timer_);
-        clf;
-        titlebox = annotation('textbox',[.3 .8 .4 .1],'String','Congratulations, you finished the game!','FontSize',20,...
-          'HorizontalAlignment','center','FitBoxToText','on');
+        close all
+        figure
+        annotation('textbox',[.3 .5 .4 .1],'String','Congratulations, you finished the game!','FontSize',20,...
+          'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
+        annotation('textbox',[.3 .4 .4 .1],'String','Good for you.','FontSize',15,...
+          'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
+        annotation('textbox',[.3 .2 .4 .1],'String','Returning to main menu in a bit...','FontSize',15,...
+          'HorizontalAlignment','center','FitBoxToText','on','EdgeColor','none');
         % play sound of victory
         % TODO fix this on Linux
 %         sound_of_victory = load('gong');

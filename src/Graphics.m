@@ -4,7 +4,7 @@ classdef Graphics < handle
     fig_;
     xlims_ = [0, 1];
     ylims_ = [0, 1];
-    potato_value_;
+    refresh_value_;
   end
 
   methods
@@ -24,28 +24,24 @@ classdef Graphics < handle
       pbaspect([dx, dy, dz]/max([dx, dy, dz]));
       xticks(0:0.1:1);
       yticks(0:0.1:1);
-      title('Drag and rotate objects to hit the target!')
+      title({'Drag and rotate objects to hit the target!','Press any key to quit game'})
     end
 
-    function draw_main_menu(self, start_button_callback, quit_callback, potato_callback)
+    function draw_main_menu(self, start_callback, quit_callback)
       cla; clf;
       titlebox = annotation('textbox',[.3 .8 .4 .1],'String','Lasers, pew pew!','FontSize',20,...
           'HorizontalAlignment','center','FitBoxToText','on');
-      start_button = uicontrol('Parent', self.fig_,...
-            'String', 'Start game (50 Hz)', 'Units', 'normalized',...
-            'Position', [0.5 0.5 0.3 0.1]);
-      start_button.Callback = start_button_callback;
       quit_button = uicontrol('Parent', self.fig_,...
             'String', 'Quit', 'Units', 'normalized',...
-            'Position', [0.5 0.4 0.3 0.1]);
+            'Position', [0.5 0.3 0.3 0.1]);
       quit_button.Callback = quit_callback;
-      potato_slider = uicontrol('Style', 'Slider', 'Min', 10, 'Max', 50, 'Value', 25,...
-          'Units', 'normalized', 'Position', [0.5 0.1 0.3 0.1]);
-      potato_button = uicontrol('Parent', self.fig_,...
-            'String', ['Potato mode (10 to 50 Hz)'], 'Units', 'normalized',...
-            'Position', [0.5 0.2 0.3 0.1]);
-      potato_button.Callback = potato_callback;
-      self.potato_value_ = potato_slider.Value;
+      start_slider = uicontrol('Style', 'Slider', 'Min', 10, 'Max', 50, 'Value', 50,...
+          'Units', 'normalized', 'Position', [0.5 0.4 0.3 0.1]);
+      start_button = uicontrol('Parent', self.fig_,...
+            'String', ['Start game (10 to 50 Hz)'], 'Units', 'normalized',...
+            'Position', [0.5 0.5 0.3 0.1]);
+      start_button.Callback = start_callback;
+      self.refresh_value_ = start_slider.Value;
       instructionbox = annotation('textbox', 'Position', [.1 .3 .4 .3],...
             'String', 'Click and drag to move objects, scroll to rotate objects',...
             'FontSize', 12, 'HorizontalAlignment', 'center',...
@@ -72,8 +68,8 @@ classdef Graphics < handle
       end
     end
     
-    function pv = get_potato_value(self)
-        period = self.potato_value_;
+    function pv = get_refresh_value(self)
+        period = self.refresh_value_;
         pv = 1/period;        
     end
     
