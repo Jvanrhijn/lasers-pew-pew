@@ -18,5 +18,10 @@ reflection.
 
 ### Usage
 
-WIP
+Call the `main` script from the MATlab command window:
 
+```
+>>> main
+```
+
+Quit the game by pressing any key during gameplay.

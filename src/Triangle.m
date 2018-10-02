@@ -1,6 +1,6 @@
 classdef Triangle < Shape
     
-  properties (SetAccess=private, GetAccess=private)
+  properties (SetAccess=private, GetAccess=public)
     vertex_one_
     vertex_two_
     vertex_three_
@@ -9,20 +9,34 @@ classdef Triangle < Shape
   methods
     
     function set_dimensions(self, dims)
+      error('Triangles not implemented');
       self.vertex_one_ = dims(1);
       self.vertex_two_ = dims(2);
-      self.vertex_three_ = self.third_vertex(self.vertex_one_, self.vertex_two_, self.location_);
-      % disp(self.vertex_three_)
-      
+      self.vertex_three_ = self.location_*3 - self.vertex_one_ - self.vertex_two_;
+    end
+
+    function c = copy(self)
+      c = Triangle(self.location_);
+      v1 = Vec(self.vertex_one_.x, self.vertex_one_.y);
+      v2 = Vec(self.vertex_two_.x, self.vertex_two_.y);
+      c.set_dimensions([v1, v2]);
+    end
+
+    function [x, y] = coordinates(self, res)
+      res = int32(res);
+      x = [linspace(self.vertex_one_.x, self.vertex_two_.x, res./4),...
+           linspace(self.vertex_two_.x, self.vertex_three_.x, res./4),...
+           linspace(self.vertex_three_.x, self.vertex_one_.x, res./4)];
+      y = [linspace(self.vertex_one_.y, self.vertex_two_.y, res./4),...
+           linspace(self.vertex_two_.y, self.vertex_three_.y, res./4),...
+           linspace(self.vertex_three_.y, self.vertex_one_.y, res./4)];
     end
     
-    function int = self.intersects(ray)
+    function int = intersects(self, ray)
     % tests if there is an intersection on any side of the triangle
-    
     % if ray starts inside triangle there must be an intersection
     if self.inside(ray.start())
       int = true;
-      
     else
       % sorted points
       point_sorted = self.counter_clockwise_sort([self.vertex_one_, self.vertex_two_, self.vertex_three_]);
@@ -92,7 +106,9 @@ classdef Triangle < Shape
       
     end
     
-    function [point, normal] = self.intersection_point(ray)
+    function [point, normal] = intersection_point(self, ray)
+      point = Vec([], []);
+      normal = Vec([], []);
       % finds the point of intersection between the ray and the side of the triangle and it's normal
       % to this side
       
@@ -146,7 +162,7 @@ classdef Triangle < Shape
         
         % case inside triangle
         if self.inside(ray.start())
-          if ray.dot(int_norm(2)) > 0
+          if ray.direction().dot(int_norm(2)) > 0
             point = int_norm(1);
             normal = int_norm(2);
           else
@@ -170,13 +186,17 @@ classdef Triangle < Shape
           end
         end
       end
-      
     end
     
     function in = inside(self, point)
       % checks if a point lies in the triangle
-      barypoint = self.barycentric(point);
-      in = ~(barypoint.x < 0 | barypoint.y < 0 | barypoint.z < 0);
+      %barypoint = self.barycentric(point);
+      %disp(barypoint);
+      %in = ~(barypoint.x < 0 | barypoint.y < 0 | barypoint.z < 0);
+      b1 = self.sgn(point, self.vertex_one_, self.vertex_two_) < 0;
+      b2 = self.sgn(point, self.vertex_two_, self.vertex_three_) < 0;
+      b3 = self.sgn(point, self.vertex_three_, self.vertex_one_) < 0;
+      in = (b1 == b2) && (b2 == b3);
     end
     
     function move_to(self, point)
@@ -187,28 +207,22 @@ classdef Triangle < Shape
       
       self.vertex_one_ = self.vertex_one_ + difference_vector;
       self.vertex_two_ = self.vertex_two_ + difference_vector;
-      self.vertex_three_ = self.vertex.three + difference_vector;
+      self.vertex_three_ = self.vertex_three_ + difference_vector;
       self.location_ = point;
     end
     
     function rotate(self, angle)
       % rotates the triangle
-      
-      % vectors that point from barycenter to vertices
-      vec_baryone = self.vertex_one_ - self.location_;
-      vec_barytwo = self.vertex_two_ - self.location_;
-      vec_barythree = self.vertex_three_ - self.location_;
-      
-      % rotate these vectors 
-      vec_baryone_rotate = vec_baryone.rotate(angle);
-      vec_barytwo_rotate = vec_barytwo.rotate(angle);
-      vec_barythree_rotate = vec_barythree.rotate(angle);
-      
-      % determine new vertex location
-      self.vertex_one_ = self.location_ + vec_baryone_rotate;
-      self.vertex_two_ = self.location_ + vec_barytwo_rotate;
-      self.vertex_three_ = self.location_ + vec_barythree_rotate;
-      
+      vertices = [self.vertex_one_, self.vertex_two_, self.vertex_three_];
+      % functional style chained mapping
+      vec_bary_move = map(...
+                        map(...
+                          map(vertices, @(x)(x - self.location_)),...
+                        @(x)(x.rotate(angle))),...
+                      @(x)(x + self.location_));
+      self.vertex_one_ = vec_bary_move(1);
+      self.vertex_two_ = vec_bary_move(2);
+      self.vertex_three_ = vec_bary_move(3);
     end
     
     function [ll, ur] = bounding_box(self)
@@ -225,20 +239,6 @@ classdef Triangle < Shape
     
     function int_side = intersects_side(self, v1, v2, ray)
       % check if the ray intersects with a side between vertex 1 and 2
-      
-%       % sort vertices of input counter clockwise with respect to location
-%       % of the triangle
-%       v1_sort = v1 - self.location_;
-%       v2_sort = v2 - self.location_;
-%       sorted_v = self.counter_clockwise_sort([v1_sort, v2_sort]);
-%       v1 = sorted_v(1);
-%       v2 = sorted_v(2);
-%       
-%       % counter-clockwise vector of side between v1 and v2
-%       vec_cc = 
-      
-      % ---- above this line is code to try and fix intersects-----------
-      
       % get slopes and offsets of lines that describe ray and side
       [ray_slope, ray_offset] = ray.line();
       [side_slope, side_offset] = self.side(v1, v2);
@@ -262,14 +262,6 @@ classdef Triangle < Shape
       end 
     end
     
-    function v3 = self.third_vertex(v1, v2, location)
-      % determines the third vertex of a triangle based on the first two
-      % verticed and the location of it's center of mass
-      x_comp = 3*location.x - v1.x - v2.x;
-      y_comp = 3*location.y - v1.y - v2.y;
-      v3 = Vec(x_comp, y_comp);
-    end
-    
     function bvec = barycentric(self, point)
       % determines coordinates of point in barycentric coordinate system of
       % this triangle. Implementation from 
@@ -289,6 +281,10 @@ classdef Triangle < Shape
         bvec = Vec(1 - (u.x + u.y)/u.z, u.y/u.z, u.x/u.z);
       end
       
+    end
+
+    function s = sgn(self, p1, p2, p3)
+      s = (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
     end
     
     function point_sorted = counter_clockwise_sort(self, points)
