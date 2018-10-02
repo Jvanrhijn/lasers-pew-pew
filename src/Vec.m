@@ -73,6 +73,10 @@ classdef Vec < handle
     function vec = rdivide(self, other)
       vec = Vec(self.x/other, self.y/other, self.z/other);
     end
+
+    function vec = mtimes(self, other)
+      vec = Vec(self.x*other, self.y*other, self.z*other);
+    end
         
   end
 

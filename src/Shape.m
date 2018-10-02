@@ -61,7 +61,6 @@ classdef Shape < handle
     % box of this shape
     bounding_box(self)
 
-
   end
 
   methods(Access=public)
