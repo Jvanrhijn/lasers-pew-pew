@@ -59,15 +59,19 @@ classdef Vec < handle
 
     % operator overloads
     function vec = plus(self, other)
-      vec = Vec(self.x+other.x, self.y+other.y);
+      vec = Vec(self.x+other.x, self.y+other.y, self.z+other.z);
     end
 
     function vec = minus(self, other)
-      vec = Vec(self.x-other.x, self.y-other.y);
+      vec = Vec(self.x-other.x, self.y-other.y, self.z-other.z);
     end
     
     function vec = uminus(self)
       vec = Vec(-self.x, -self.y, -self.z);
+    end
+    
+    function vec = rdivide(self, other)
+      vec = Vec(self.x/other, self.y/other, self.z/other);
     end
         
   end

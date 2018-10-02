@@ -10,6 +10,14 @@ classdef Shape < handle
       self.location_ = location;
     end
 
+    function col = collides(self, other)
+      [ll_bb_self, ur_bb_self] = self.bounding_box();
+      [ll_bb_other, ur_bb_other] = other.bounding_box();
+      col = (ll_bb_self.x < ur_bb_other.x) && (ur_bb_self.x > ll_bb_other.x)...
+         && (ur_bb_self.y > ll_bb_other.y) && (ll_bb_self.y < ur_bb_other.y)...
+         && self ~= other;
+    end
+
   end
 
   methods(Abstract)
@@ -46,6 +54,14 @@ classdef Shape < handle
     % rotate the shape counter-clockwise about its centroidal axis
     rotate(self, angle)
 
+    % return x, y coordinate arrays for the shape with resolution res
+    coordinates(self, res)
+
+    % return the lower-left and upper-right corners of the bounding
+    % box of this shape
+    bounding_box(self)
+
+
   end
 
   methods(Access=public)
@@ -77,7 +93,7 @@ classdef Shape < handle
       v_diff = v1 - v2;
       angle = v_diff.angle_to_horizontal();
       slope = tan(angle);
-      offset = v1.y - slope*v1.x
+      offset = v1.y - slope*v1.x;
     end
         
   end

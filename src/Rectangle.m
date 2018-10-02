@@ -8,9 +8,30 @@ classdef Rectangle < Shape
 
   methods
 
+    function c = copy(self)
+      c = Rectangle(Vec(self.location_.x, self.location_.y));
+      c.set_dimensions([self.width_, self.height_]);
+      c.rotate(self.slant_);
+    end
+
     function set_dimensions(self, dims)
       self.width_ = dims(1);
       self.height_ = dims(2);
+    end
+
+    function [x, y] = coordinates(self, res)
+      res = int32(res);
+      [w, h] = self.width_height(); 
+      s = self.slant();
+      p = self.location();
+      x = [linspace(-1, 1, res./4), ones(1, res./4),...
+           linspace(1, -1, res./4), -ones(1, res./4)]*w/2;
+      y = [-ones(1, res./4), linspace(-1, 1, res./4),...
+           ones(1, res./4), linspace(1, -1, res./4)]*h/2;
+      xrot = x*cos(s) - y*sin(s);
+      yrot = x*sin(s) + y*cos(s);
+      x = xrot + p.x;
+      y = yrot + p.y;
     end
 
     function int = intersects(self, ray)
@@ -33,7 +54,7 @@ classdef Rectangle < Shape
 
     function [point, normal] = intersection_point(self, ray)
       point = Vec([], []);
-      normal = Vec([], []); % stub
+      normal = Vec([], []); 
       if self.intersects(ray)
         ray_moved_start = ray.start() - self.location_;
         ray_moved = Ray(ray_moved_start.rotate(-self.slant_), ray.angle() - self.slant_);
@@ -106,6 +127,16 @@ classdef Rectangle < Shape
       point_rot = Vec(point.x, point.y).rotate(-self.slant_) - rot_rect_loc;
       in = (-self.width_/2 < point_rot.x) & (point_rot.x < self.width_/2)...
          & (-self.height_/2 < point_rot.y) & (point_rot.y < self.height_/2);
+    end
+
+    function [ll, ur] = bounding_box(self)
+      % non-rotated, non-moved x coordinates
+      xs = [-self.width_/2, self.width_/2, self.width_/2, -self.width_/2];
+      ys = [-self.height_/2, -self.height_/2, self.height_/2, self.height_/2];
+      xs_rot = xs*cos(self.slant_) - ys*sin(self.slant_);
+      ys_rot = xs*sin(self.slant_) + ys*cos(self.slant_);
+      ll = Vec(min(xs_rot), min(ys_rot)) + self.location_;
+      ur = Vec(max(xs_rot), max(ys_rot)) + self.location_;
     end
 
   end

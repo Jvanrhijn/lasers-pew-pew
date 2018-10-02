@@ -1,7 +1,7 @@
 classdef MirrorFactory < ComponentFactory
   
   methods(Static)
-
+    
     function c = build_circle(x, y, dims)
       s = Circle(Vec(x, y));
       s.set_dimensions(dims);
@@ -9,7 +9,9 @@ classdef MirrorFactory < ComponentFactory
     end
 
     function t = build_triangle(x, y, dims)
-      t = [];
+      s = Triangle(Vec(x, y));
+      s.set_dimensions(dims);
+      t = Mirror(s);
     end
 
     function r = build_rectangle(x, y, dims)

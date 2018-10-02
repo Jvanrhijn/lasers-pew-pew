@@ -9,7 +9,9 @@ classdef LensFactory < ComponentFactory
     end
 
     function t = build_triangle(x, y, dims)
-      t = [];
+      s = Triangle(Vec(x, y));
+      s.set_dimensions(dims);
+      t = Lens(s);
     end
 
     function r = build_rectangle(x, y, dims)

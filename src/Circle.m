@@ -6,8 +6,19 @@ classdef Circle < Shape
 
   methods
 
+    function c = copy(self)
+      c = Circle(Vec(self.location_.x, self.location_.y));
+      c.set_dimensions(self.radius);
+    end
+
     function set_dimensions(self, dims)
       self.radius = dims(1);
+    end
+
+    function [x, y] = coordinates(self, res)
+      theta = linspace(0, 2*pi, 100);
+      x = self.radius*cos(theta) + self.location_.x;
+      y = self.radius*sin(theta) + self.location_.y;
     end
 
     function on = intersects(self, ray)
@@ -90,6 +101,11 @@ classdef Circle < Shape
     function in = inside(self, point)
       sep = self.location_ - point;
       in = sep.norm() <= self.radius;
+    end
+
+    function [ll, ur] = bounding_box(self)
+      ll = self.location_ - Vec(self.radius, self.radius); 
+      ur = self.location_ + Vec(self.radius, self.radius);
     end
 
     function move_to(self, point)
