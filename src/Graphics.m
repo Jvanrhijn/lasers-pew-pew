@@ -24,7 +24,7 @@ classdef Graphics < handle
       pbaspect([dx, dy, dz]/max([dx, dy, dz]));
       xticks(0:0.1:1);
       yticks(0:0.1:1);
-      title('Drag and rotate objects to hit the target!')
+      title({'Drag and rotate objects to hit the target!','Press any key to quit game'})
     end
 
     function draw_main_menu(self, start_button_callback, quit_callback, potato_callback)

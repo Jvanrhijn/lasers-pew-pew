@@ -34,7 +34,14 @@ classdef GameEngine < handle
       self.load_levels_disc();
       self.draw_state();
     end
-
+    
+    function stop(self)
+      stop(self.timer_);
+      self.inp_.stop();
+      clear all;
+      close all;
+    end
+    
     function load_levels_disc(self)
         levels = levels_setup(self.directory_);
         self.load_levels(levels);                
@@ -91,11 +98,6 @@ classdef GameEngine < handle
         self.start_selection()
     end
 
-    function stop(self)
-      clear all;
-      close all;
-    end
-
     function active_rays = trace_ray(self)
       % start at the starting point
       active_rays = [self.level_node_.value().starting_ray()];
@@ -136,8 +138,6 @@ classdef GameEngine < handle
           ax = gca;
           set(get(ax, 'Children'), 'HitTest', 'off', 'PickableParts', 'none');
         case GameState.MAIN_MENU
-%           self.timer_.stop();
-%           self.inp_.stop();
           clf;
           self.graphics_.draw_main_menu(@(~, ~)(self.start_selection()),...
                                         @(~, ~)(self.stop()),...

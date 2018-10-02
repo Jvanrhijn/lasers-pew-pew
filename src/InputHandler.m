@@ -4,13 +4,13 @@ classdef InputHandler < handle
     button_
     point_
     selected_obj_
-    game_state_
+    game_engine_
   end
 
   methods
 
-    function self = InputHandler(game_state)
-      self.game_state_ = game_state;
+    function self = InputHandler(game_engine)
+      self.game_engine_ = game_engine;
     end
 
     function start(self)
@@ -18,6 +18,7 @@ classdef InputHandler < handle
       ax = gca;
       ax.ButtonDownFcn = @(x, y)(self.wbdcb(x, y));
       fig.WindowScrollWheelFcn = @(x, y)(self.wbswcb(x, y));
+      fig.WindowKeyPressFcn = @(x,y)(self.keypress(x, y));
     end
 
     function stop(self)
@@ -34,7 +35,7 @@ classdef InputHandler < handle
 
     function wbdcb(self, src, callbackdata)
       % callback for mouse button down
-      ax = self.game_state_.figure().CurrentAxes;
+      ax = self.game_engine_.figure().CurrentAxes;
       cp = ax.CurrentPoint;
       point = Vec(cp(1, 1), cp(1, 2));
       c = self.get_selected_component(point);
@@ -49,12 +50,12 @@ classdef InputHandler < handle
 
     function wbmcb(self, offset, src, callbackdata)
       % callback for mouse movement
-      ax = self.game_state_.figure().CurrentAxes;
+      ax = self.game_engine_.figure().CurrentAxes;
       cp = ax.CurrentPoint;
       p = Vec(cp(1, 1), cp(1, 2));
       obj_copy = self.selected_obj_.shape.copy();
       obj_copy.move_to(p - offset);
-      for c = self.game_state_.components()
+      for c = self.game_engine_.components()
         % if there is a collision after moving, 
         % move it back to the old location. Ugly as all hell.
         if c{1}.shape.collides(obj_copy) && c{1} ~= self.selected_obj_
@@ -75,7 +76,7 @@ classdef InputHandler < handle
 
     function wbswcb(self, src, callbackdata)
       % callback for mouse scroll
-      ax = self.game_state_.figure().CurrentAxes;
+      ax = self.game_engine_.figure().CurrentAxes;
       cp = ax.CurrentPoint;
       p = Vec(cp(1, 1), cp(1, 2));
       c = self.get_selected_component(p);
@@ -84,10 +85,15 @@ classdef InputHandler < handle
       end
       c.rotate(sign(callbackdata.VerticalScrollCount)*pi/50);
     end
+    
+    function keypress(self,src, event)
+      disp('Quitting game...');  
+      self.game_engine_.stop();
+    end
 
     function comp = get_selected_component(self, point)
       comp = [];
-      for c = self.game_state_.components()
+      for c = self.game_engine_.components()
         if c{1}.inside(point)
           self.selected_obj_ = c{1};
           comp = c{1};
