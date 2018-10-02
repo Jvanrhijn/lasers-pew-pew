@@ -93,7 +93,7 @@ classdef GameEngine < handle
         self.timer_.Period = period;
     end
     
-    function start_potato_selection(self,period)
+    function start_level_selection(self,period)
         self.set_refresh_rate(period);
         self.start_selection()
     end
@@ -139,9 +139,8 @@ classdef GameEngine < handle
           set(get(ax, 'Children'), 'HitTest', 'off', 'PickableParts', 'none');
         case GameState.MAIN_MENU
           clf;
-          self.graphics_.draw_main_menu(@(~, ~)(self.start_selection()),...
-                                        @(~, ~)(self.stop()),...
-                                        @(~,~)(self.start_potato_selection(self.graphics_.get_potato_value())));
+          self.graphics_.draw_main_menu(@(~,~)(self.start_level_selection(self.graphics_.get_refresh_value())),...
+                                        @(~, ~)(self.stop()));
         case GameState.LEVEL_SELECT
           self.timer_.stop();
           self.inp_.stop();

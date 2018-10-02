@@ -87,7 +87,7 @@ classdef InputHandler < handle
     end
     
     function keypress(self,src, event)
-      disp('Quitting game...');  
+      disp('Game closed');  
       self.game_engine_.stop();
     end
 
